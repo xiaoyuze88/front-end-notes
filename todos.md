@@ -23,3 +23,6 @@
 21. 小程序原理
 22. localStorgae/sessionStorage
 23. react原理
+24. dns
+25. 4层/7层均衡负载区别？
+26. 手写Promise

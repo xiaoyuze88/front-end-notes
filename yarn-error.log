@@ -1,0 +1,31 @@
+Arguments: 
+  /usr/local/bin/node /usr/local/bin/yarn @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint eslint-plugin-prettier@3.4.1 prettier@1.19.1 typescript -D
+
+PATH: 
+  /Library/Frameworks/Python.framework/Versions/3.9/bin:/opt/local/bin:/opt/local/sbin:/Users/xyz/Library/Python/2.7/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/opt/X11/bin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/opt/local/bin:/opt/local/sbin:/Users/xyz/Library/Python/2.7/bin:/mongodb/bin:/Users/xyz/.rvm/bin:/usr/local/apache-ant/bin:/Users/xyz/Library/Android/sdk/tools:/Users/xyz/Library/Android/sdk/platform-tools:/mongodb/bin:/Users/xyz/.rvm/bin:/usr/local/apache-ant/bin:/Users/xyz/Library/Android/sdk/tools:/Users/xyz/Library/Android/sdk/platform-tools
+
+Yarn version: 
+  1.22.10
+
+Node version: 
+  14.17.6
+
+Platform: 
+  darwin x64
+
+Trace: 
+  SyntaxError: /Users/xyz/Sites/tencent/qcloud/front-end-notes/package.json: Unexpected end of JSON input
+      at JSON.parse (<anonymous>)
+      at /Users/xyz/.config/yarn/global/node_modules/yarn/lib/cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (/Users/xyz/.config/yarn/global/node_modules/yarn/lib/cli.js:310:30)
+      at /Users/xyz/.config/yarn/global/node_modules/yarn/lib/cli.js:321:13
+
+npm manifest: 
+  
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
