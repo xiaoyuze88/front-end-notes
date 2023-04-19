@@ -32,7 +32,7 @@
 
 // 动态规划
 //
-function isMatch(s: string, p: string): boolean {
+function isMatch(s, p) {
   const dp = [...Array(s.length + 1)].map(() => Array(p.length + 1).fill(false));
 
   dp[0][0] = true;
@@ -40,34 +40,34 @@ function isMatch(s: string, p: string): boolean {
   for (let j = 1, l = p.length + 1; j < l; j++) {
     if (p[j - 1] === "*") dp[0][j] = dp[0][j - 2];
   }
-
+  debugger;
   for (let i = 1, l_i = s.length + 1; i < l_i; i++) {
     for (let j = 1, l_j = p.length + 1; j < l_j; j++) {
+      if (i == 1 && j ==5 ) debugger
       if (s[i - 1] === p[j - 1] || p[j - 1] === ".") {
+
+
         dp[i][j] = dp[i - 1][j - 1];
       } else if (p[j - 1] === "*") {
-        // if (s[i - 1] === p[j - 2] || p[j - 2] === ".") {
-        //   dp[i][j] = dp[i][j - 2] || dp[i - 1][j - 2] || dp[i - 1][j];
-        // } 
-        // if (p[j - 3] === s[i - 1]) {
-        //   dp[i][j] = dp[i][j - 2];
-        // } else if (p[j - 2] === s[i - 1]) {
-        //   dp[i][j] = dp[i - 1][j - 2];
-        // } else if (p[j - 2] === s[i - 1] && p[j - 2] === s[i - 2]) {
-        //   dp[i][j] = dp[i - 1][j];
-        // } else if (p[j - 2] !== s[i - 1] && p[j - 3] === s[i - 1]) {
-        //   dp[i][j] = dp[i][j - 2];
-        // } else {
-        //   console.error("unexcepted case", i, j);
-        // }
+        if (p[j - 2] == s[i - 1] || p[j - 2] === ".") {
+          // 2、7 == 1、5失败，期望2、7==true但是1、5==false
+          // 1、5 == 0、5失效，期望1、5==true但是0、5==false，该条件有异常
+          dp[i][j] = dp[i - 1][j];
+        } else if (p[j - 2] !== s[i - 1]) {
+          dp[i][j] = dp[i][j - 2];
+        }
       }
     }
   }
 
-  console.log(dp);
+  // console.log(dp);
 
-  return false;
+  return dp[s.length][p.length];
 }
 
-console.log(isMatch("cabaaaa", "c*ba*"));
+// console.log(isMatch("aa", "a"));
+// console.log(isMatch("aa", "a*"));
+// console.log(isMatch("ab", ".*"));
 // console.log(isMatch("c", "c"));
+// 条件遍历到 i= 2,j=7时不符合预期，此时 dp[2][7] == dp[2][5]   但是25==false，期望是true
+console.log(isMatch("aaa", "ab*a*c*a"));
