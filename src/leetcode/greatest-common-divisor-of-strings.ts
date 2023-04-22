@@ -23,4 +23,41 @@
 // 1 <= str1.length, str2.length <= 1000
 // str1 和 str2 由大写英文字母组成
 
-function gcdOfStrings(str1: string, str2: string): string {}
+// 重点是gcd算法，算出gcd后可直接判断
+function gcdOfStrings(str1: string, str2: string): string {
+  function isMatch(str: string, substring: string): boolean {
+    const len = str.length / substring.length;
+
+    return (
+      str ===
+      [...Array(len)].reduce((prev) => {
+        return prev + substring;
+      }, "")
+    );
+  }
+
+  function gcd(a: number, b: number) {
+    let bigger = Math.max(a, b);
+    let smaller = Math.min(a, b);
+
+    let temp: number;
+
+    while (smaller !== 0) {
+      temp = bigger;
+      bigger = smaller;
+      smaller = temp % smaller;
+    }
+
+    return bigger;
+  }
+
+  const len = gcd(str1.length, str2.length);
+
+  const result = str1.substring(0, len);
+
+  return isMatch(str1, result) && isMatch(str2, result) ? result : "";
+}
+
+// console.log(gcd(27, 9));
+// console.log(gcd(32, 8));
+console.log(gcdOfStrings("ABAB", "AB"));

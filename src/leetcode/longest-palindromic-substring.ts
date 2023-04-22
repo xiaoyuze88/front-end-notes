@@ -27,8 +27,9 @@
 // 1.4 记录子问题结果
 
 // 对于该问题：
-// 状态转移方程：P(i, j) = P(i + 1, j - 1) && Si === Sj
-// 其中i,j为左、右指针，result[i][j]: boolean 表示其是否是回文子串
+// dp[i][j]: boolean 代表 s 从 i到j的字符串是否为回文子串
+// 若 s[i] === s[j]，则 dp[i][j] 的结果取决于其中间子串是否为回文串，即：
+// dp[i][j] = dp[i + 1][j - 1] & s[i] === s[j]
 function longestPalindrome1(s: string): string {
   const result: boolean[][] = [...Array(s.length)].map(() => [...Array(s.length)]);
 
@@ -55,8 +56,6 @@ function longestPalindrome1(s: string): string {
         }
       }
 
-      // console.log("left", left, "right", right, "length", length, result);
-
       if (result[left][right] && right - left + 1 > max) {
         max = right - left + 1;
         begin = left;
@@ -64,12 +63,11 @@ function longestPalindrome1(s: string): string {
     }
   }
 
-  // console.log({ begin, max });
-
   return s.substring(begin, begin + max);
 }
 
 // 扩散法，遍历中点，往两边扩散
+// TODO
 function longestPalindrome(s: string): string {
   let max = 1;
 
@@ -83,12 +81,12 @@ function longestPalindrome(s: string): string {
       max = Math.max(2, max);
     }
 
-    while(left >= 0 && right <= s.length) {
+    while (left >= 0 && right <= s.length) {
       if (i[left] === i[right]) {
-
       }
     }
   }
+  return '';
 }
 
 console.log(longestPalindrome("bb"));

@@ -17,7 +17,7 @@
 // // 0 <= s.length <= 5 * 104
 // // s 由英文字母、数字、符号和空格组成
 
-function lengthOfLongestSubstring1(s: string): number {
+function lengthOfLongestSubstring(s: string): number {
   let maxCount = 0;
 
   const map = {};
@@ -55,19 +55,27 @@ function lengthOfLongestSubstring1(s: string): number {
   const addKey = (key) => {
     if (!map[key]) map[key] = 0;
 
-      map[key]++;
-  }
+    map[key]++;
+  };
 
+  // 指针平移，每次碰到的字符及其数量记入 map
+  // 1. 若平移到某一个字符发现计数>1
+  // 说明当前字符有重复，如果此时前面字符串无重复，则更新最大值为Max(map count, latestMax)
+  // 接下来此时有两种case：
+  // 1.1 最左边字符与当前字符相同，此时最左剔除，当前加入，一增一减map无变化
+  // 1.2 最左边字符不等于当前字符，此时将最左边一位字符从map中递减1（若为0则从map中剔除），相当于窗口平移，而当前值+1
+  // 2. 若指针指向的字符未重复，但是当前字符串中已有重复字符，说明原本已有重复（如：bacad 遍历到 d 时，此时map中包含：{ a: 2, c: 1 }），此时仍将最左边一位减一，且当前值+1
+  // 3. 当前值无重复，且当前map中也无重复，当前值+1
+  // 遍历一遍到结尾，最后判断一次 Max(map count, latestMax)，然后返回最大值
   for (let i = 0, l = s.length; i < l; i++) {
-    // console.log("map", s[i], map, map[s[i]], hasDuplicate(), getMaxCount(), maxCount);
-
     const duplicatedKey = hasDuplicate();
 
     // 每当有重复，则剔除最左边一个
-    // 判重逻辑有问题，不能只看当前元素是否重复，移动过程中其他也可能仍然重复，此时仍要剔除最左侧元素
     if (map[s[i]]) {
-      // 设置最大值
-      maxCount = Math.max(getMaxCount(), maxCount);
+      // 如果当前值有重复且前面的字符串无重复，更新最大值
+      if (!duplicatedKey) {
+        maxCount = Math.max(getMaxCount(), maxCount);
+      }
 
       // 如果最左边元素不等于当前元素，则剔除最左边一个元素(-1)
       if (s[i - maxCount] !== s[i]) {
@@ -88,41 +96,62 @@ function lengthOfLongestSubstring1(s: string): number {
     }
   }
 
-  // console.log("final", map, getMaxCount(), maxCount);
-
   maxCount = Math.max(getMaxCount(), maxCount);
 
   return maxCount;
 }
 
-function lengthOfLongestSubstring(s: string): number {
-  let maxCount = 0;
+// dp[i][j]: boolean 表示s从i~j的字符串是否无重复
+// 状态转移：dp[i][j] = dp[i][j-1] & !(s[j - 1] in s[i - 1]~s[j - 1])
+// 有解，但是根据条件 s.length < 5 * 10^4 ，此时 dp 数组会内存溢出.
+function lengthOfLongestSubstringDP(s) {
+  const dp = [...Array(s.length + 1)].map(() => Array(s.length + 1).fill(false));
 
-  const map = {};
+  dp[0][0] = true;
+  if (s.length > 0) {
+    dp[0][1] = true;
+  }
 
-  let i = 0;
+  for (let i = 0, l = s.length + 1; i < l; i++) {
+    dp[i][i] = true;
+  }
 
-  while (i < s.length) {
-    if (map[s[i]]) {
-      // 拿到当前长度，找到重复的元素的下标，然后直接平移maxCount个单位
-      maxCount = Math.max(maxCount, Object.keys(map).length);
-    } else {
-      map[s[i]] = i;
+  // console.log('dp', dp);
+
+  let max = s.length > 0 ? 1 : 0;
+
+  // i < j
+  for (let i = 1, l_i = s.length + 1; i < l_i; i++) {
+    for (let j = i + 1, l_j = s.length + 1; j < l_j; j++) {
+      const prevStr = s.substring(i - 1, j - 1);
+
+      if (!prevStr.includes(s[j - 1])) {
+        dp[i][j] = dp[i][j - 1];
+        if (dp[i][j]) {
+          // console.log('try set max', max, i, j, j - i + 1);
+          max = Math.max(max, j - i + 1);
+        }
+      }
     }
   }
 
-  return maxCount;
+  // console.log('dp', dp);
+
+  return max;
 }
 
 const printResult = (str, expect) => {
   // console.log("result", str);
 
+  // lengthOfLongestSubstringDP(str);
+  // return;
+
   console.log(
     str,
-    lengthOfLongestSubstring(str),
+    lengthOfLongestSubstringDP(str),
     "expect: ",
     expect,
-    lengthOfLongestSubstring(str) === expect
+    lengthOfLongestSubstringDP(str) === expect
   );
 };
 
@@ -133,3 +162,4 @@ printResult(" ", 1);
 printResult("", 0);
 printResult("dvdf", 3);
 printResult("qrsvbspk", 5);
+printResult("aab", 2);
