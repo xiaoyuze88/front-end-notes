@@ -21,4 +21,45 @@
 // 1 <= nums.length <= 105
 // nums[i] 不是 0 就是 1
 // 0 <= k <= nums.length
-function longestOnes(nums: number[], k: number): number {}
+// 等价于寻找区间内最大的子数组，满足有k个0
+function longestOnes(nums: number[], k: number): number {
+  let left = 0;
+  let right = 0;
+  let zeros = 0;
+  let max = 0;
+
+  while (right < nums.length) {
+    if (nums[right] === 0) {
+      zeros++;
+    }
+
+    // 挪 left
+    while (zeros > k) {
+      if (nums[left] === 0) {
+        zeros--;
+      }
+      left++;
+    }
+
+    // 此时满足left-right zeros <= k，可以统计长度
+    max = Math.max(max, right - left + 1);
+    // 挪right
+    right++;
+  }
+
+  return max;
+}
+
+const printResult = (nums: number[], k: number, expected: number) => {
+  // console.log("result", str);
+
+  // lengthOfLongestSubstringDP(str);
+  // return;
+
+  console.log(nums, k, longestOnes(nums, k), longestOnes(nums, k) === expected);
+};
+
+printResult([1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0], 3, 6);
+printResult([1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0], 2, 6);
+// printResult([0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1], 3, 10);
+printResult([0], 0, 0);
