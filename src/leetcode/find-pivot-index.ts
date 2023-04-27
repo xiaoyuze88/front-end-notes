@@ -6,7 +6,7 @@
 
 // 如果数组有多个中心下标，应该返回 最靠近左边 的那一个。如果数组不存在中心下标，返回 -1 。
 
-//  
+//
 
 // 示例 1：
 
@@ -30,12 +30,28 @@
 // 中心下标是 0 。
 // 左侧数之和 sum = 0 ，（下标 0 左侧不存在元素），
 // 右侧数之和 sum = nums[1] + nums[2] = 1 + -1 = 0 。
-//  
+//
 
 // 提示：
 
-// 1 <= nums.length <= 104
+// 1 <= nums.length <= 10^4
 // -1000 <= nums[i] <= 1000
 function pivotIndex(nums: number[]): number {
+  const total = nums.reduce((prev, next) => prev + next, 0);
 
-};
+  let sum = 0;
+
+  for (let i = 0, l = nums.length; i < l; i++) {
+    if (2 * sum + nums[i] === total) {
+      return i;
+    }
+
+    sum = sum + nums[i];
+  }
+
+  return -1;
+}
+
+console.log(pivotIndex([1, 7, 3, 6, 5, 6]));
+console.log(pivotIndex([1, 2, 3]));
+console.log(pivotIndex([2, 1, -1]));
