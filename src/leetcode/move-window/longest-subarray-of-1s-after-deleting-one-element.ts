@@ -1,3 +1,5 @@
+import { printResult } from "../utils";
+
 // 给你一个二进制数组 nums ，你需要从中删掉一个元素。
 
 // 请你在删掉元素的结果数组中，返回最长的且只包含 1 的非空子数组的长度。
@@ -27,7 +29,8 @@
 
 // 1 <= nums.length <= 105
 // nums[i] 要么是 0 要么是 1 。
-// 返回仅包含一个0的最长子数组
+
+// 即返回仅包含一个0的最长子数组，还是毛毛虫法，找只包含一个0的最长子数组
 function longestSubarray(nums: number[]): number {
   let left = 0;
   let right = 0;
@@ -53,17 +56,8 @@ function longestSubarray(nums: number[]): number {
   return max - 1;
 }
 
-const printResult = (nums: number[], expected: number) => {
-  // console.log("result", str);
-
-  // lengthOfLongestSubstringDP(str);
-  // return;
-
-  console.log(nums, longestSubarray(nums), longestSubarray(nums) === expected);
-};
-
-// printResult([1,1,0,1], 3);
-printResult([1, 1, 1], 2);
-// printResult([0, 1, 1, 1, 0, 1, 1, 0, 1], 5);
-// printResult([0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1], 3, 10);
-// printResult([0], 0, 0);
+printResult(longestSubarray, [[1, 1, 0, 1]], 3);
+printResult(longestSubarray, [[1, 1, 1]], 2);
+printResult(longestSubarray, [[0, 1, 1, 1, 0, 1, 1, 0, 1]], 5);
+printResult(longestSubarray, [[0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1]], 3);
+printResult(longestSubarray, [[0]], 0);

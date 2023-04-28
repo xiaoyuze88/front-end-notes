@@ -18,6 +18,9 @@
 
 // 1 <= s.length <= 3 * 105
 // s 由 可打印的 ASCII 字符组成
+
+import { printResult } from "../utils";
+
 // 双指针，两头往中间遍历，各自碰到元音字母则交互
 // i >= j 退出
 function reverseVowels(s) {
@@ -41,7 +44,7 @@ function reverseVowels(s) {
     }
   }
 
-  return arr.join('');
+  return arr.join("");
 }
 
 function isVowels(s) {
@@ -55,15 +58,6 @@ function revert(arr, i, j) {
   arr[i] = temp;
 }
 
-const printResult = (s: string, expected: string) => {
-  // console.log("result", str);
-
-  // lengthOfLongestSubstringDP(str);
-  // return;
-
-  console.log(s, reverseVowels(s), "expected: ", expected, reverseVowels(s) === expected);
-};
-
-printResult("hello", "holle");
+printResult(reverseVowels, ["hello"], "holle");
 // printResult("leetcode", "leotcede");
 // printResult("", "");

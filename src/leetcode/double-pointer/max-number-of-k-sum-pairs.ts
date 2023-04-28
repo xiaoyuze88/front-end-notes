@@ -28,6 +28,11 @@
 // 1 <= nums.length <= 105
 // 1 <= nums[i] <= 109
 // 1 <= k <= 109
+
+// 做法1：排序后双指针
+// 做法2（当前）：
+// 1. 先统计各个数的数量
+// 2. 遍历数组，判断 k - num 的差，代表着需要的另一个数，从 countMap 中减去对应的数，<= 0 则表示已无法操作
 function maxOperations(nums: number[], k: number): number {
   const map = {};
 

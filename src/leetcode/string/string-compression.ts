@@ -35,9 +35,11 @@
 // chars[i] 可以是小写英文字母、大写英文字母、数字或符号
 
 function compress(chars: string[]): number {
+  // 每一段相同字符的起点
   let start = 0;
 
   for (let i = 0, l = chars.length; i < l; i++) {
+    // 不相等，判断从 start 到这里的长度，然后压缩
     if (chars[i] !== chars[start]) {
       const length = i - start;
 
@@ -53,7 +55,8 @@ function compress(chars: string[]): number {
     handleCompress(chars, start, length);
   }
 
-
+  // 去掉多余空格
+  // TODO: 如果第一个遍历从后往前，是不是不需要再额外进行这次遍历？
   for (let i = chars.length - 1; i >= 0; i--) {
     if (!chars[i]) chars.splice(i, 1);
   }
@@ -70,12 +73,11 @@ function handleCompress(chars: string[], start: number, length: number) {
       if (lengthStr[i - 1]) {
         chars[start + i] = lengthStr[i - 1];
       } else {
-        chars[start + i] = '';
+        chars[start + i] = "";
       }
     }
   }
 }
-
 
 // console.log(compress(["a", "a", "b", "b", "c", "c", "c"]));
 console.log(compress(["a", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b", "b"]));

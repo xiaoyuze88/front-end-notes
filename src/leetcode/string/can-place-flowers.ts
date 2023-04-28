@@ -20,11 +20,15 @@
 // flowerbed[i] 为 0 或 1
 // flowerbed 中不存在相邻的两朵花
 // 0 <= n <= flowerbed.length
+import { printResult } from "../utils";
+
 function canPlaceFlowers(flowerbed: number[], n: number): boolean {
   let i = -1;
 
   let count = 0;
 
+  // 首先考虑两边都有花，中间为空的case
+  // 找到规律，发现中间的空间与可种的花的规律为 Math.floor((j - i - 2)/2)
   for (let j = 0, l = flowerbed.length; j < l; j++) {
     if (flowerbed[j]) {
       if (i === -1) {
@@ -36,6 +40,8 @@ function canPlaceFlowers(flowerbed: number[], n: number): boolean {
       i = j;
     }
   }
+
+  // 然后再分别计算全为0和右边还有0的case
 
   // 说明全为0
   if (i === -1) {
@@ -49,21 +55,21 @@ function canPlaceFlowers(flowerbed: number[], n: number): boolean {
   return count >= n;
 }
 
-const printResult = (flowerbed: number[], n: number) => {
-  // console.log("result", str);
+// const printResult = (flowerbed: number[], n: number) => {
+//   // console.log("result", str);
 
-  // lengthOfLongestSubstringDP(str);
-  // return;
+//   // lengthOfLongestSubstringDP(str);
+//   // return;
 
-  console.log(flowerbed, n, canPlaceFlowers(flowerbed, n));
-};
+//   console.log(flowerbed, n, canPlaceFlowers(flowerbed, n));
+// };
 
-// printResult([0], 1);
-// printResult([0, 0], 1);
-// printResult([0, 0, 0], 2);
-// printResult([1, 0, 0, 0, 1], 1);
-// printResult([1, 0, 0, 0, 0, 0, 1], 2);
-// printResult([0, 0, 0, 1, 0, 0, 0, 0, 0, 1], 3);
-// printResult([0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0], 4);
-// printResult([1, 0, 0, 0, 1], 1);
-printResult([0, 0, 1, 0, 0], 1);
+printResult(canPlaceFlowers, [[0], 1], true);
+printResult(canPlaceFlowers, [[0, 0], 1], true);
+printResult(canPlaceFlowers, [[0, 0, 0], 2], true);
+printResult(canPlaceFlowers, [[1, 0, 0, 0, 1], 1], true);
+printResult(canPlaceFlowers, [[1, 0, 0, 0, 0, 0, 1], 2], true);
+printResult(canPlaceFlowers, [[0, 0, 0, 1, 0, 0, 0, 0, 0, 1], 3], true);
+printResult(canPlaceFlowers, [[0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0], 4], true);
+printResult(canPlaceFlowers, [[1, 0, 0, 0, 1], 1], true);
+printResult(canPlaceFlowers, [[0, 0, 1, 0, 0], 1], true);

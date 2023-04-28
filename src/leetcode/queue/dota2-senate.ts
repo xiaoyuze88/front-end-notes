@@ -52,8 +52,6 @@ function predictPartyVictory(senate: string): string {
     if (queueDire[0] < queueRadiant[0]) {
       queueRadiant.shift();
 
-      // const nextOrder = queueDire[0] + queueRadiant.length + queueDire.length + 1;
-
       const voted = queueDire.shift();
 
       queueDire.push(voted + senate.length);

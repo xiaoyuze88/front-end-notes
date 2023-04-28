@@ -1,3 +1,5 @@
+import { printResult } from "../utils";
+
 // 给你字符串 s 和整数 k 。
 
 // 请返回字符串 s 中长度为 k 的单个子字符串中可能包含的最大元音字母数。
@@ -38,6 +40,8 @@
 
 const vowels = "aeiou";
 
+// 还是先统计元音总和
+// 然后固定窗口长度遍历，依次增减，比较最大值
 function maxVowels(s: string, k: number): number {
   let lastCount = [...Array(k)].reduce((prev, next, index) => {
     return prev + countVowel(s[index]);
@@ -58,9 +62,8 @@ function countVowel(char: string): number {
   return vowels.includes(char) ? 1 : 0;
 }
 
-// console.log(maxVowels("abciiidef", 3));
-// console.log(maxVowels("aeiou", 2));
-// console.log(maxVowels("leetcode", 3));
-// console.log(maxVowels("rhythms", 4));
-// console.log(maxVowels("tryhard", 4));
-console.log(maxVowels("ibpbhixfiouhdljnjfflpapptrxgcomvnb", 33));
+printResult(maxVowels, ["abciiidef", 3], 3);
+printResult(maxVowels, ["aeiou", 2], 2);
+printResult(maxVowels, ["leetcode", 3], 2);
+printResult(maxVowels, ["rhythms", 4], 0);
+printResult(maxVowels, ["tryhard", 4], 1);

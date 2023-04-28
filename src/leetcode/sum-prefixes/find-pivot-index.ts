@@ -36,6 +36,9 @@
 
 // 1 <= nums.length <= 10^4
 // -1000 <= nums[i] <= 1000
+
+// 由中位数概念，可以知道总数 = 左侧和 === 右侧和 + 中位数 && 左侧和 === 右侧和，即：total = left + right + nums[i] = 2 * left + nums[i]
+// 所以可以先计算总和，然后遍历累加左侧和，当 2 * leftSum + nums[i] === total 时即是满足条件下标
 function pivotIndex(nums: number[]): number {
   const total = nums.reduce((prev, next) => prev + next, 0);
 

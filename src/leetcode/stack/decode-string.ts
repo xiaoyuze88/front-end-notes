@@ -57,7 +57,7 @@ function decodeString(s: string): string {
     }
 
     if (s[i] === "[") {
-      // 碰到第一级左括号，推出堆栈，保留上下文
+      // 碰到第一级左括号，推入堆栈，保留上下文
       stack.push({
         repeat: currentRepeat,
         string: ""

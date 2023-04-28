@@ -24,6 +24,7 @@
 //
 
 // 进阶：你可以在 O(1) 的额外空间复杂度内完成这个题目吗？（ 出于对空间复杂度分析的目的，输出数组不被视为额外空间。）
+
 // L[i] R[i] 代表下标为i的数左、右边所有数的乘积，
 // 其中: L[0] = 1, L[1] = nums[0], R[length - 1] = 1; R[length - 2] = nums[length - 1];
 function productExceptSelf(nums: number[]): number[] {

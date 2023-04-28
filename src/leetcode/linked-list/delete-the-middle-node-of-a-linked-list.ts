@@ -1,3 +1,5 @@
+import { ListNode, arrayToListNode, printResult } from "../utils";
+
 // 给你一个链表的头节点 head 。删除 链表的 中间节点 ，并返回修改后的链表的头节点 head 。
 
 // 长度为 n 链表的中间节点是从头数起第 ⌊n / 2⌋ 个节点（下标从 0 开始），其中 ⌊x⌋ 表示小于或等于 x 的最大整数。
@@ -38,16 +40,6 @@
 // 来源：力扣（LeetCode）
 // 链接：https://leetcode.cn/problems/delete-the-middle-node-of-a-linked-list
 
-class ListNode {
-  val: number;
-  next: ListNode | null;
-
-  constructor(val?: number, next?: ListNode | null) {
-    this.val = val === undefined ? 0 : val;
-    this.next = next === undefined ? null : next;
-  }
-}
-
 // 链表 快慢指针
 // 快指针每次移动2，慢指针每次移动1，则快指针遍历完时，慢指针指向中间
 function deleteMiddle(head: ListNode | null): ListNode | null {
@@ -76,30 +68,32 @@ function deleteMiddle(head: ListNode | null): ListNode | null {
   return head;
 }
 
-const printResult = (arr: number[]) => {
-  let head = new ListNode(arr[0]);
+// const printResult = (arr: number[]) => {
+//   let head = new ListNode(arr[0]);
 
-  let current = head;
+//   let current = head;
 
-  for (let i = 1, l = arr.length; i < l; i++) {
-    current.next = new ListNode(arr[i]);
-    current = current.next;
-  }
+//   for (let i = 1, l = arr.length; i < l; i++) {
+//     current.next = new ListNode(arr[i]);
+//     current = current.next;
+//   }
 
-  const result = deleteMiddle(head);
+//   const result = deleteMiddle(head);
 
-  current = result;
+//   current = result;
 
-  const resultArr = [];
+//   const resultArr = [];
 
-  while (current) {
-    resultArr.push(current.val);
-    current = current.next;
-  }
+//   while (current) {
+//     resultArr.push(current.val);
+//     current = current.next;
+//   }
 
-  console.log(arr, resultArr);
-};
+//   console.log(arr, resultArr);
+// };
 
-printResult([1, 2, 3, 4]);
+const listNode1 = arrayToListNode([1, 2, 3, 4]);
+const listNode2 = arrayToListNode([2, 1]);
 
-printResult([2, 1]);
+printResult(deleteMiddle, [listNode1], arrayToListNode([1, 3, 4, 1, 2, 6]));
+printResult(deleteMiddle, [listNode2], arrayToListNode([2]));

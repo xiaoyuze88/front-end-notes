@@ -22,6 +22,9 @@
 // n == nums.length
 // 1 <= k <= n <= 10^5
 // -10^4 <= nums[i] <= 10^4
+
+// 1. 先计算所有值的和，得到所有数的平均值
+// 2. 指定窗口长度，遍历，每移动一个值，在总和之上加上后入的值，减去前值，得到当前的平均值，max值赋值
 function findMaxAverage(nums: number[], k: number): number {
   let lastAmount = [...Array(k)].reduce((prev, next, index) => {
     return prev + nums[index];

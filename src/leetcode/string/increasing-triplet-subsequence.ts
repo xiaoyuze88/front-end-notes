@@ -28,6 +28,12 @@
 //
 
 // 进阶：你能实现时间复杂度为 O(n) ，空间复杂度为 O(1) 的解决方案吗？
+
+// 存在递增长度为3的子序列 == 存在 first < second < third 
+// 先让 first = nums[0], second = MaxInteger，一个一个往下找
+// 1. 如果有大于 first 的数，赋值给 second
+// 2. 如果有小于 first 的数，则替换 first，严格保证 first < second
+// 3. 如果有大于 second 数，即表示成立
 function increasingTriplet(nums: number[]): boolean {
   let first = nums[0];
   let second = Number.MAX_SAFE_INTEGER;

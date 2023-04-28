@@ -1,3 +1,5 @@
+import { printResult } from "../utils";
+
 // 给定一个二进制数组 nums 和一个整数 k，如果可以翻转最多 k 个 0 ，则返回 数组中连续 1 的最大个数 。
 
 //
@@ -21,13 +23,16 @@
 // 1 <= nums.length <= 105
 // nums[i] 不是 0 就是 1
 // 0 <= k <= nums.length
+
 // 等价于寻找区间内最大的子数组，满足有k个0
+// 动态窗口，left/right 代表一段字符串的左右，当left - right满足中间包含k个0时满足条件
 function longestOnes(nums: number[], k: number): number {
   let left = 0;
   let right = 0;
   let zeros = 0;
   let max = 0;
 
+  // 先挪right，直到不满足条件，然后拖left过来（毛毛虫，前脚先走，直到不满足条件，然后拖左脚回来）
   while (right < nums.length) {
     if (nums[right] === 0) {
       zeros++;
@@ -50,16 +55,6 @@ function longestOnes(nums: number[], k: number): number {
   return max;
 }
 
-const printResult = (nums: number[], k: number, expected: number) => {
-  // console.log("result", str);
-
-  // lengthOfLongestSubstringDP(str);
-  // return;
-
-  console.log(nums, k, longestOnes(nums, k), longestOnes(nums, k) === expected);
-};
-
-printResult([1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0], 3, 6);
-printResult([1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0], 2, 6);
-// printResult([0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1], 3, 10);
-printResult([0], 0, 0);
+printResult(longestOnes, [[1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0], 3], 6);
+printResult(longestOnes, [[1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0], 2], 6);
+printResult(longestOnes, [[0], 0], 0);

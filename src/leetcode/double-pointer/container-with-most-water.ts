@@ -24,6 +24,10 @@
 // n == height.length
 // 2 <= n <= 105
 // 0 <= height[i] <= 104
+
+// 双指针分别指向左右边界，可以通过两指针的位置及对应的值算出当前面积
+// 比较两个指针较小的一个，将其右/左移一位
+// 最后比较所有值
 function maxArea(height: number[]): number {
   let left = 0;
   let right = height.length - 1;

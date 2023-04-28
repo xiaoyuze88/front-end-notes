@@ -49,6 +49,7 @@ function closeStrings(word1: string, word2: string): boolean {
   const map1 = {};
   const map2 = {};
 
+  // 先统计各字符串每个字符出现次数
   for (let i = 0, l = word1.length; i < l; i++) {
     if (!map1[word1[i]]) map1[word1[i]] = 0;
     if (!map2[word2[i]]) map2[word2[i]] = 0;
@@ -60,8 +61,8 @@ function closeStrings(word1: string, word2: string): boolean {
   const keys1 = Object.keys(map1);
   const keys2 = Object.keys(map2);
 
-  // const count1 = [];
-  // const count2 = [];
+  // 然后统计每个字符重复次数的重复次数，比如：map = { a: 2, c: 2 }，表示a重复了2次，c重复了2次，那么重复次数的重复次数即: countMap = { 2: 2 }
+  // 这里需要保证每个重复次数的重复次数完全相等
   const count1Map = {};
   const count2Map = {};
 
@@ -71,8 +72,6 @@ function closeStrings(word1: string, word2: string): boolean {
     if (!(keys1[i] in map2)) return false;
     if (!(keys2[i] in map1)) return false;
 
-    // count1.push(map1[keys1[i]]);
-    // count2.push(map2[keys2[i]]);
     if (!count1Map[map1[keys1[i]]]) count1Map[map1[keys1[i]]] = 0;
     if (!count2Map[map2[keys2[i]]]) count2Map[map2[keys2[i]]] = 0;
 
