@@ -41,15 +41,12 @@ function decodeString(s: string): string {
   const stack = [];
 
   let currentRepeat = "";
-  let currentString = "";
-  let recording = false;
 
   for (let i = 0, l = s.length; i < l; i++) {
     const isNumber = checkIsNumber(s[i]);
     const isString = checkIsString(s[i]);
 
-    // 不需要重复
-    if (!currentRepeat && isString) {
+    if (isString && !stack.length) {
       result += s[i];
       continue;
     }
@@ -60,33 +57,38 @@ function decodeString(s: string): string {
     }
 
     if (s[i] === "[") {
-      recording = true;
-      continue;
-    }
-
-    // 结束，整理推入堆栈
-    if (s[i] === "]") {
+      // 碰到第一级左括号，推出堆栈，保留上下文
       stack.push({
-        repeat: +currentRepeat,
-        string: currentString
+        repeat: currentRepeat,
+        string: ""
       });
-
       currentRepeat = "";
-      currentString = "";
-      recording = false;
       continue;
     }
 
-    if (recording) {
-      currentString += s[i];
+    if (s[i] === "]") {
+      const { repeat, string } = stack.pop();
+
+      const decodeStr = [...Array(+repeat)].reduce((prev) => prev + string, "");
+
+      // 如果还有上一级，则加到上一级的上下文中去
+      // 否则可以直接往结果上去加
+      if (stack.length) {
+        stack[stack.length - 1].string += decodeStr;
+      } else {
+        result += decodeStr;
+      }
+
+      continue;
+    }
+
+    // 到这里认为肯定是普通字符串了
+    if (stack.length) {
+      stack[stack.length - 1].string += s[i];
+    } else {
+      result += s[i];
     }
   }
-
-  let current = stack.pop();
-
-  while (current) {}
-
-  debugger;
 
   return result;
 }
@@ -96,3 +98,59 @@ const checkIsString = (s: string) => /[a-z]/.test(s);
 
 // console.log(decodeString("3[a]2[bc]"));
 console.log(decodeString("3[a2[c]]"));
+
+// function decodeString(s: string): string {
+//   let result = "";
+
+//   const stack = [];
+
+//   let currentRepeat = "";
+//   let currentString = "";
+//   let recording = false;
+
+//   for (let i = 0, l = s.length; i < l; i++) {
+//     const isNumber = checkIsNumber(s[i]);
+//     const isString = checkIsString(s[i]);
+
+//     // 不需要重复
+//     if (!currentRepeat && isString) {
+//       result += s[i];
+//       continue;
+//     }
+
+//     if (isNumber) {
+//       currentRepeat += s[i];
+//       continue;
+//     }
+
+//     if (s[i] === "[") {
+//       recording = true;
+//       continue;
+//     }
+
+//     // 结束，整理推入堆栈
+//     if (s[i] === "]") {
+//       stack.push({
+//         repeat: +currentRepeat,
+//         string: currentString
+//       });
+
+//       currentRepeat = "";
+//       currentString = "";
+//       recording = false;
+//       continue;
+//     }
+
+//     if (recording) {
+//       currentString += s[i];
+//     }
+//   }
+
+//   let current = stack.pop();
+
+//   while (current) {}
+
+//   debugger;
+
+//   return result;
+// }
