@@ -41,7 +41,7 @@
 // 链接：https://leetcode.cn/problems/maximum-twin-sum-of-a-linked-list
 // 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
-import { ListNode, arrayToListNode, printListNode } from "../utils";
+import { ListNode, arrayToListNode } from "./ListNode";
 
 function pairSum(head: ListNode | null): number {
   // 1. 快慢指针，快指针到尾时，慢指针指向左半边的终点，慢指针.next 为右半边的起点

@@ -1,5 +1,7 @@
 import chalk from "chalk";
 
+export type IterationType = "recursion" | "iteration";
+
 export const printResult = <T extends (...args: any) => any>(
   fn: T,
   [...args]: [...Parameters<T>],

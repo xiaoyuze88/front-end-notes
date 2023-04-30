@@ -1,4 +1,5 @@
-import { ListNode, arrayToListNode, printResult } from "../utils";
+import { printResult } from "../utils";
+import { ListNode, arrayToListNode } from "./ListNode";
 
 // 给你一个链表的头节点 head 。删除 链表的 中间节点 ，并返回修改后的链表的头节点 head 。
 
