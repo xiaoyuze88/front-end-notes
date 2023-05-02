@@ -34,9 +34,28 @@ export const postOrderIterator_iteration = <T = number>(
   tree: TreeNode<T>,
   cb: TreeNodeIteratorCallback<T>
 ) => {
-  
+  const stack = [tree];
+
+  let current = tree;
+
+  while (stack.length) {
+    if (current.left) {
+      stack.push(current.left);
+      current = current.left;
+    } else {
+      const node = stack.pop();
+
+      if (current.right) {
+        stack.push(current.right);
+        current = current.right;
+        continue;
+      }
+
+      cb(node.val, node);
+    }
+  }
 };
 
 // test case
-postOrderIterator(testNodes.treeFullDeep, (val) => console.log(val), "recursion");
+postOrderIterator(testNodes.treeFullDeep, (val) => console.log(val), "iteration");
 // preOrderIterator2(testNodes.treeFull, (val) => console.log(val));

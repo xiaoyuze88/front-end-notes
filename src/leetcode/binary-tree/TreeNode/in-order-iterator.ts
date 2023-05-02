@@ -45,40 +45,34 @@ export const inOrderIterator_recursion = <T = number>(
 };
 
 // 迭代
-// export const inOrderIterator_iteration = <T = number>(
-//   tree: TreeNode<T>,
-//   cb: TreeNodeIteratorCallback<T>
-// ) => {
-//   const stack = [tree];
-
-//   let current: TreeNode<T> = tree;
-
-//   while (stack.length) {
-//     // 有左，一直往里推
-//     if (current.left) {
-//       stack.push(current.left);
-//       current = current.left;
-//     }
-//     // 否则说明左到底了，开始执行
-//     else {
-//       const last = stack.pop();
-
-//       cb(last.val, last);
-
-//       if (last.right) {
-//         stack.push(last.right);
-//         current = last.right;
-//       }
-//     }
-//   }
-// };
 export const inOrderIterator_iteration = <T = number>(
   tree: TreeNode<T>,
   cb: TreeNodeIteratorCallback<T>
 ) => {
   const stack = [tree];
+
+  let current: TreeNode<T> = tree;
+
+  while (stack.length) {
+    // 有左，一直往里推
+    if (current.left) {
+      stack.push(current.left);
+      current = current.left;
+    }
+    // 否则说明左到底了，开始执行
+    else {
+      const last = stack.pop();
+
+      cb(last.val, last);
+
+      if (last.right) {
+        stack.push(last.right);
+        current = last.right;
+      }
+    }
+  }
 };
 
 // test case
-inOrderIterator(testNodes.treeFullDeep, (val) => console.log(val), "recursion");
+// inOrderIterator(testNodes.treeFullDeep, (val) => console.log(val), 'iteration');
 // preOrderIterator2(testNodes.treeFull, (val) => console.log(val));
