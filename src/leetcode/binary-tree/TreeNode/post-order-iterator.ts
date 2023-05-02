@@ -36,26 +36,31 @@ export const postOrderIterator_iteration = <T = number>(
 ) => {
   const stack = [tree];
 
-  let current = tree;
+  // 堆栈最后一个节点
+  let lastNode: TreeNode<T>;
+  // 上一个遍历过的节点
+  let prevNode: TreeNode<T>;
 
   while (stack.length) {
-    if (current.left) {
-      stack.push(current.left);
-      current = current.left;
+    lastNode = stack[stack.length - 1];
+
+    // 如果左节点遍历过，且上一个完成遍历的节点不是该节点的左或者右节点，则入栈（否则说明这个节点已经遍历过了，需要出栈找下一个了）
+    if (lastNode.left && lastNode.left !== prevNode && lastNode.right !== prevNode) {
+      stack.push(lastNode.left);
+    }
+    // 同上，找右节点
+    else if (lastNode.right && lastNode.right !== prevNode) {
+      stack.push(lastNode.right);
     } else {
       const node = stack.pop();
 
-      if (current.right) {
-        stack.push(current.right);
-        current = current.right;
-        continue;
-      }
-
       cb(node.val, node);
+      
+      prevNode = node;
     }
   }
 };
 
 // test case
-postOrderIterator(testNodes.treeFullDeep, (val) => console.log(val), "iteration");
+// postOrderIterator(testNodes.treeFullDeep, (val) => console.log(val), "iteration");
 // preOrderIterator2(testNodes.treeFull, (val) => console.log(val));

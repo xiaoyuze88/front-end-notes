@@ -34,7 +34,9 @@ export const preOrderIterator_recursion = <T = number>(
   cb: TreeNodeIteratorCallback<T>
 ) => {
   const iterator = (node: TreeNode<T>) => {
-    cb(node.val, node);
+    const shouldBreak = cb(node.val, node);
+
+    if (shouldBreak === true) return;
 
     if (node.left) iterator(node.left);
     if (node.right) iterator(node.right);
@@ -53,7 +55,9 @@ export const preOrderIterator_iteration = <T = number>(
   while (stack.length) {
     const node = stack.pop();
 
-    cb(node.val, node);
+    const shouldBreak = cb(node.val, node);
+
+    if (shouldBreak === true) return;
 
     if (node.right !== null) stack.push(node.right);
     if (node.left !== null) stack.push(node.left);
@@ -61,4 +65,4 @@ export const preOrderIterator_iteration = <T = number>(
 };
 
 // test case
-preOrderIterator(testNodes.treeFullDeep, (val) => console.log(val), "iteration");
+// preOrderIterator(testNodes.treeFullDeep, (val) => console.log(val), "iteration");

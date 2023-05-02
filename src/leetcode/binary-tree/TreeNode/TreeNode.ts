@@ -9,7 +9,10 @@ export class TreeNode<T = number> {
   }
 }
 
-export type TreeNodeIteratorCallback<T = number> = (nodeValue: T, node: TreeNode<T>) => void;
+export type TreeNodeIteratorCallback<T = number> = (
+  nodeValue: T,
+  node: TreeNode<T>
+) => boolean | void;
 
 // [3, 9, 20, null, null, 15, 7];
 // [1, null, 2, 3, 4, null, null, 5]; // null下面的节点被省略

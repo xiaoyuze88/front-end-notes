@@ -1,4 +1,5 @@
-import { TreeNode, arrayToTreeNode } from "../utils";
+import { printResult } from "../utils";
+import { TreeNode, arrayToTreeNode } from "./TreeNode";
 
 // 给定一个二叉树，找出其最大深度。
 
@@ -21,11 +22,24 @@ import { TreeNode, arrayToTreeNode } from "../utils";
 // 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 function maxDepth(root: TreeNode | null): number {
-  // 遍历时带上当前level的上下文
+  if (!root) return 0;
 
-  const 
+  let maxLevel = 0;
+
+  const iterator = (node: TreeNode, level: number) => {
+    if (maxLevel < level) {
+      maxLevel = level;
+    }
+
+    if (node.left !== null) iterator(node.left, level + 1);
+    if (node.right !== null) iterator(node.right, level + 1);
+  };
+
+  iterator(root, 1);
+
+  return maxLevel;
 }
 
 const tree = arrayToTreeNode([3, 9, 20, null, null, 15, 17]);
 
-console.log(tree);
+printResult(maxDepth, [tree], 3);
