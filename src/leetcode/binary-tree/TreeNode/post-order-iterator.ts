@@ -55,7 +55,7 @@ export const postOrderIterator_iteration = <T = number>(
       const node = stack.pop();
 
       cb(node.val, node);
-      
+
       prevNode = node;
     }
   }

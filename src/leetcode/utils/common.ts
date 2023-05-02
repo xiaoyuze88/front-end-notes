@@ -1,13 +1,17 @@
 import chalk from "chalk";
+import isEqual from "lodash.isequal";
 
 export type IterationType = "recursion" | "iteration";
 
 export const printResult = <T extends (...args: any) => any>(
   fn: T,
   [...args]: [...Parameters<T>],
-  expected: ReturnType<T>
+  expected: ReturnType<T>,
+  equalFn: (resp: ReturnType<T>, expected: ReturnType<T>) => boolean = isEqual
 ) => {
   const result = fn(...args);
+
+  const isMatch = equalFn(result, expected);
 
   console.log(
     "input: (",
@@ -17,6 +21,6 @@ export const printResult = <T extends (...args: any) => any>(
     ", expected: ",
     expected,
     ", is matched? => ",
-    chalk[result === expected ? "green" : "red"](result === expected)
+    chalk[isMatch ? "green" : "red"](isMatch)
   );
 };

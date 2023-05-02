@@ -1,4 +1,6 @@
-import { TreeNode } from "./TreeNode";
+import { printResult } from "../utils";
+import { TreeNode, arrayToTreeNode } from "./TreeNode";
+import { isEqual } from "lodash-es";
 
 // 给定一个二叉树的 根节点 root，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。
 
@@ -28,5 +30,51 @@ import { TreeNode } from "./TreeNode";
 // 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 function rightSideView(root: TreeNode | null): number[] {
-  
+  if (!root) return [];
+
+  const stack: {
+    level: number;
+    node: TreeNode;
+  }[] = [
+    {
+      level: 0,
+      node: root
+    }
+  ];
+
+  const levelArr: number[] = [];
+
+  while (stack.length) {
+    const current = stack.shift();
+
+    if (current) {
+      const { level, node } = current;
+
+      if (levelArr.length < level + 1) {
+        levelArr.push(node.val);
+      } else {
+        levelArr[level] = node.val;
+      }
+
+      if (node.left) {
+        stack.push({
+          level: level + 1,
+          node: node.left
+        });
+      }
+
+      if (node.right) {
+        stack.push({
+          level: level + 1,
+          node: node.right
+        });
+      }
+    }
+  }
+
+  return levelArr;
 }
+
+const tree3 = arrayToTreeNode([1, 2, 3, null, 5, null, 4]);
+
+printResult(rightSideView, [tree3], [1, 3, 4]);
