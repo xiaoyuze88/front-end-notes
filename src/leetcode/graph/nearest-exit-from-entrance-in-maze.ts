@@ -1,5 +1,8 @@
 // 给你一个 m x n 的迷宫矩阵 maze （下标从 0 开始），矩阵中有空格子（用 '.' 表示）和墙（用 '+' 表示）。同时给你迷宫的入口 entrance ，用 entrance = [entrancerow, entrancecol] 表示你一开始所在格子的行和列。
 
+import { printResult } from "../utils";
+import { testData } from "./nearest-exit-from-entrance-in-maze_testcase";
+
 // 每一步操作，你可以往 上，下，左 或者 右 移动一个格子。你不能进入墙所在的格子，你也不能离开迷宫。你的目标是找到离 entrance 最近 的出口。出口 的含义是 maze 边界 上的 空格子。entrance 格子 不算 出口。
 
 // 请你返回从 entrance 到最近出口的最短路径的 步数 ，如果不存在这样的路径，请你返回 -1 。
@@ -46,4 +49,125 @@
 // 来源：力扣（LeetCode）
 // 链接：https://leetcode.cn/problems/nearest-exit-from-entrance-in-maze
 // 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
-function nearestExit(maze: string[][], entrance: number[]): number {}
+function nearestExit(maze: string[][], entrance: [number, number]): number {
+  // 四个方向的矢量 [y, x] 代表 y/x 轴偏移量
+  const vector: [number, number][] = [
+    [0, 1],
+    [1, 0],
+    [-1, 0],
+    [0, -1]
+  ];
+
+  const isBorder = (y: number, x: number) => {
+    if (x === 0 || y === 0 || x === maze[0].length - 1 || y === maze.length - 1) {
+      return true;
+    }
+
+    return false;
+  };
+
+  const queue: {
+    coordinate: [number, number];
+    count: number;
+  }[] = [
+    {
+      coordinate: entrance,
+      count: 0
+    }
+  ];
+
+  const visited = new Set<string>();
+
+  // maze[entrance[0]][entrance[1]] = "x";
+
+  let calcCount = 0;
+
+  console.time("calc");
+
+  const countMap: {
+    [y: string]: {
+      [x: string]: number;
+    };
+  } = {};
+
+  while (queue.length) {
+    const {
+      coordinate: [y, x],
+      count
+    } = queue.shift();
+
+    visited.add(`${y}|${x}`);
+
+    if (!countMap[y]) countMap[y] = {};
+    if (!countMap[y][x]) countMap[y][x] = 0;
+
+    countMap[y][x]++;
+
+    // console.log(countMap);
+
+    console.log("visited.size", visited.size);
+    console.log("queue.length", queue.length);
+
+    // maze[x][y]
+    for (let i = 0, l = 4; i < l; i++) {
+      calcCount++;
+      const [shiftY, shiftX] = vector[i];
+
+      const nextX = x + shiftX;
+      const nextY = y + shiftY;
+
+      const nextLocation = maze?.[nextY]?.[nextX];
+
+      if (!visited.has(`${nextY}|${nextX}`) && nextLocation === ".") {
+        // 下一个空格
+        if (isBorder(nextY, nextX)) {
+          return count + 1;
+        }
+
+        // maze[nextY][nextX] = "x";
+        visited.add(`${nextY}|${nextX}`);
+
+        queue.push({
+          coordinate: [nextY, nextX],
+          count: count + 1
+        });
+      }
+    }
+  }
+
+  console.timeEnd("calc");
+
+  return -1;
+}
+
+// printResult(
+//   nearestExit,
+//   [
+//     [
+//       ["+", "+", ".", "+"],
+//       [".", ".", ".", "+"],
+//       ["+", "+", "+", "."]
+//     ],
+//     [1, 2]
+//   ],
+//   1
+// );
+
+// printResult(
+//   nearestExit,
+//   [
+//     [
+//       ["+", ".", "+", "+", "+", "+", "+"],
+//       ["+", ".", "+", ".", ".", ".", "+"],
+//       ["+", ".", "+", ".", "+", ".", "+"],
+//       ["+", ".", ".", ".", "+", ".", "+"],
+//       ["+", "+", "+", "+", "+", ".", "+"]
+//     ],
+//     [0, 1]
+//   ],
+//   12
+// );
+
+console.log(nearestExit(testData, [42, 4]));
+
+// printResult(nearestExit, [testCaseJson, [42, 4]], 10);
