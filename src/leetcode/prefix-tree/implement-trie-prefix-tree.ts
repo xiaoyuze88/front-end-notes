@@ -36,14 +36,101 @@
 // 链接：https://leetcode.cn/problems/implement-trie-prefix-tree
 // 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
+// A-Z => 65-90
+// const alphabetCharCode_uppercase = [...Array(26)].map((_, index) => 65 + index) as LetterCharLowercase;
+
+type IncrementalRange<N extends number, Acc extends number[] = []> = Acc["length"] extends N
+  ? Acc[number]
+  : IncrementalRange<N, [...Acc, Acc["length"]]>;
+
+type IntRange<From extends number, To extends number> = Exclude<
+  IncrementalRange<To>,
+  IncrementalRange<From>
+>;
+
+type LetterCharLowercase = IntRange<97, 122>;
+
+// a-z => 97-122
+const alphabetCharCode_lowercase = [...Array(26)].map(
+  (_, index) => 97 + index
+) as LetterCharLowercase[];
+
 class Trie {
-  constructor() {}
+  root = new TrieNode();
 
-  insert(word: string): void {}
+  get total() {
+    return this.root.prefix;
+  }
 
-  search(word: string): boolean {}
+  insert(word: string): void {
+    let currentNode = this.root;
 
-  startsWith(prefix: string): boolean {}
+    for (let i = 0; i < word.length; i++) {
+      currentNode = currentNode.append(word[i], i === word.length - 1);
+    }
+  }
+
+  private searchNode(word: string): TrieNode {
+    if (!this.total) return null;
+
+    let currentNode = this.root;
+    let i = 0;
+
+    while (currentNode && i < word.length) {
+      currentNode = currentNode.find(word[i]);
+      i++;
+    }
+
+    if (!currentNode) return null;
+
+    return currentNode;
+  }
+
+  search(word: string): boolean {
+    const lastMatchedNode = this.searchNode(word);
+
+    if (!lastMatchedNode) return false;
+
+    return lastMatchedNode.end > 0;
+  }
+
+  startsWith(prefix: string): boolean {
+    const lastMatchedNode = this.searchNode(prefix);
+
+    return !!lastMatchedNode;
+  }
+}
+
+class TrieNode {
+  children: Partial<{
+    [key: string]: TrieNode;
+  }> = {};
+  // 以它为前缀的数
+  prefix = 0;
+  // 以它结尾的数
+  end = 0;
+
+  append(char: string, isEnd: boolean): TrieNode {
+    // 往后加了一个，所以以它为前缀的+1
+    this.prefix++;
+
+    if (!this.children[char]) {
+      this.children[char] = new TrieNode();
+    }
+
+    const nextNode = this.children[char];
+
+    if (isEnd) {
+      // 当前节点是终点，标记end+1
+      nextNode.end++;
+    }
+
+    return nextNode;
+  }
+
+  find(char: string) {
+    return this.children[char];
+  }
 }
 
 /**
@@ -53,3 +140,14 @@ class Trie {
  * var param_2 = obj.search(word)
  * var param_3 = obj.startsWith(prefix)
  */
+
+const trie = new Trie();
+
+["b", "abc", "abd", "bcd", "abcd", "efg", "hii"].forEach((word) => trie.insert(word));
+// ["a", "ab", "abc"].forEach((word) => trie.insert(word));
+
+console.log(trie.search("b"));
+console.log(trie.search("bc"));
+console.log(trie.search("bcd"));
+console.log(trie.search("bcd"));
+// debugger;

@@ -3,6 +3,21 @@ import isEqual from "lodash.isequal";
 
 export type IterationType = "recursion" | "iteration";
 
+export type IncrementalRange<N extends number, Acc extends number[] = []> = Acc["length"] extends N
+  ? Acc[number]
+  : IncrementalRange<N, [...Acc, Acc["length"]]>;
+
+export type IntRange<From extends number, To extends number> = Exclude<
+  IncrementalRange<To>,
+  IncrementalRange<From>
+>;
+
+// a-z => 97-122
+export const alphabetCharCode_lowercase = [...Array(26)].map((_, index) => 97 + index) as IntRange<
+  97,
+  122
+>[];
+
 export const printResult = <T extends (...args: any) => any>(
   fn: T,
   [...args]: [...Parameters<T>],
