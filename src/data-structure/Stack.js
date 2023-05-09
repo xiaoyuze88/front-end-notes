@@ -1,28 +1,24 @@
 // 先入后出
-export class Stack {
-  private _counter = 0;
-  private _storage = {};
+export class Stack<T = number> {
+  store: T[] = [];
 
-  push(item) {
-    this._storage[this._counter] = item;
-    this._counter++;
+  get length() {
+    return this.store.length;
   }
 
-  pop() {
-    if (this._counter === 0) return undefined;
-
-    const result = this._storage[this._counter - 1];
-    delete this._storage[this._counter - 1];
-    this._counter--;
-
-    return result;
+  isEmpty() {
+    return this.length === 0;
   }
 
   peak() {
-    return this._storage[this._counter - 1];
+    return this.store[this.store.length - 1];
   }
 
-  get length() {
-    return this._counter;
+  pop() {
+    return this.store.pop();
+  }
+
+  push(item: T) {
+    this.store.push(item);
   }
 }
