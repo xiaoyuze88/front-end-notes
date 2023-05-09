@@ -39,19 +39,41 @@
 
 class StockSpanner {
   // 这个 stack 肯定是单调递增的
-  stack: number[] = [];
+  stack: {
+    price: number;
+    index: number;
+  }[] = [];
+
+  index = -1;
 
   next(price: number): number {
-    // 只要最后一个比当天大，肯定就是1，而且要清空 stack
-    if (this.stack.length && this.stack[this.stack.length - 1] > price) {
-      this.stack = [price];
+    this.index++;
 
-      return 1;
+    // 问题相当于我从后往前看，能看到的最近一个比我高的高个子在哪
+    // 栈里只留下最前一个比我大的，就像一个高个子站在我前面，那么再在他前面的矮个子我都看不到了
+    // 比我还矮的都不重要了，推出去
+    while (this.stack.length && this.stack[this.stack.length - 1].price <= price) {
+      this.stack.pop();
     }
 
-    this.stack.push(price);
+    // 没有比我高的了，那么返回1
+    if (!this.stack.length) {
+      this.stack.push({
+        price,
+        index: this.index
+      });
+      return this.index + 1;
+    }
 
-    return this.stack.length;
+    // 我前面离我最近的比我高的下标
+    const latestHigherIndex = this.stack[this.stack.length - 1].index;
+
+    this.stack.push({
+      price,
+      index: this.index
+    });
+
+    return this.index - latestHigherIndex;
   }
 }
 

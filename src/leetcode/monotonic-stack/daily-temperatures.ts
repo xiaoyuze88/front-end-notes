@@ -24,6 +24,32 @@
 // 来源：力扣（LeetCode）
 // 链接：https://leetcode.cn/problems/daily-temperatures
 // 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+// function dailyTemperatures(temperatures: number[]): number[] {
+//   const stack: {
+//     temperature: number;
+//     index: number;
+//   }[] = [];
+
+//   const result = Array(temperatures.length).fill(0);
+
+//   for (let i = temperatures.length - 1; i >= 0; i--) {
+//     while (stack.length && stack[stack.length - 1].temperature <= temperatures[i]) {
+//       stack.pop();
+//     }
+
+//     if (stack.length) {
+//       result[i] = stack[stack.length - 1].index - i;
+//     }
+
+//     stack.push({
+//       temperature: temperatures[i],
+//       index: i
+//     });
+//   }
+
+//   return result;
+// }
+
 function dailyTemperatures(temperatures: number[]): number[] {
   const stack: {
     temperature: number;
@@ -33,11 +59,14 @@ function dailyTemperatures(temperatures: number[]): number[] {
   const result = Array(temperatures.length).fill(0);
 
   for (let i = temperatures.length - 1; i >= 0; i--) {
-    while (stack.length && stack[stack.length - 1].temperature <= temperatures[i]) {
+    while (stack.length && stack[stack.length - 1].temperature < temperatures[i]) {
       stack.pop();
     }
 
-    if (stack.length) {
+    // 说明后面没有比我大的
+    if (!stack.length) {
+      result[i] = 0;
+    } else {
       result[i] = stack[stack.length - 1].index - i;
     }
 
