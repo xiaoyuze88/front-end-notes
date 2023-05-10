@@ -9,6 +9,7 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "3.4.1",
     "prettier": "1.19.1",
+    "promises-aplus-tests": "^2.1.2",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
   },
