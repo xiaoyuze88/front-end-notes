@@ -4,11 +4,8 @@
 2. tcp
 3. browser cache
 4. https
-5. promise
-6. event-loop
 7. cors
 8. what happened when input url?
-9. Process/Thread
 10. webpack
 11. import/export/require
 12. render tree
@@ -25,10 +22,17 @@
 23. react原理
 24. dns
 25. 4层/7层均衡负载区别？
-26. 手写Promise
 27. iframe
 28. 跨域
 29. same site cookie
 30. 内存计算、内存管理
 31. Number问题（精度，浮点数，byte） -- https://juejin.cn/post/6991844682066034718
 32. 快排、并归排序
+
+# ongoing
+
+5. promise
+6. event-loop
+9. Process/Thread
+
+# done
