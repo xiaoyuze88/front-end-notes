@@ -3,24 +3,6 @@
 ## 四层模型
 
 ### 1. 应用层(Application Layer)
-* enable://proxyHost proxy://127.0.0.1:12639
-
-# 计费
-/\/qcloud\/tea\/app\/tsearch-buy(\.(zh|en|jp|ko|dev))?(\.\w{10})?\.(js|css|ttf)(\.map)?/ http://127.0.0.1:8323/tsearch-buy.$4$5
-/\/qcloud\/tea\/app\/tsearch-buy/__webpack_hmr$/ http://127.0.0.1:8323/__webpack_hmr
-/\/qcloud\/tea\/app\/tsearch-buy.tsearch-buy(.+)?(\.\w+)\.(hot-update\.(js|json))$/ http://127.0.0.1:8323/tsearch-buy.tsearch-buy$2.$3
-/\/qcloud\/tea\/app\/tsearch-buy.singltsearchtyleFile(.+)?(\.\w+)\.(hot-update\.(js|json))$/ http://127.0.0.1:8323/tsearch-buy.singltsearchtyleFile$2.$3
-/\/qcloud\/tea\/app\/tsearch-buy(.+)?(\.\w+)\.(hot-update\.(js|json))$/ http://127.0.0.1:8323/tsearch-buy$2.$3
-
-# 控制台侧代理
-/\/qcloud\/tea\/app\/tsearch(-(\w+))?(\.(zh|en|jp|ko|dev))?(\.\w{10})?\.(js|css|ttf)(\.map)?/ http://127.0.0.1:8322/tsearch$1.$6$7
-/\/qcloud\/tea\/app\/(.+\/)?__webpack_hmr$/ http://127.0.0.1:8322/__webpack_hmr
-/\/qcloud\/tea\/app\/(.+\.)?(\w+)\.(hot-update\.(js|json))$/ http://127.0.0.1:8322/$1$2.$3
-
-cloudcache.tencent-cloud.cn/qcloud/vendors/react/react16.production.js cloudcache.tencent-cloud.com/qcloud/vendors/react/react-17.0.2.development.js
-
-127.0.0.1 insight.cloud.tencent.com
-
 如：Http/Ftp/Telnet/DNS/SMTP 等
 
 ### 2. 传输层(Transport Layer)

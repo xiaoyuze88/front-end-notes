@@ -1,9 +1,5 @@
 # todos
-
-1. http
-2. tcp
 3. browser cache
-4. https
 7. cors
 8. what happened when input url?
 10. webpack
@@ -20,19 +16,29 @@
 21. 小程序原理
 22. localStorgae/sessionStorage
 23. react原理
-24. dns
-25. 4层/7层均衡负载区别？
 27. iframe
 28. 跨域
 29. same site cookie
 30. 内存计算、内存管理
 31. Number问题（精度，浮点数，byte） -- https://juejin.cn/post/6991844682066034718
 32. 快排、并归排序
+34. 二叉树 - dfs - 前序/中序/后序
+35. 二叉树 - bfs
+36. 图 - dfs
+37. 图 - bfs
+38. 图 - 并查集 (union-find)
+39. 单调栈
+40. 堆/优先级队列
 
 # ongoing
+2. tcp
+1. http2/3
+4. https
+24. dns
+25. 4层/7层均衡负载区别？
 
+# done
 5. promise
 6. event-loop
 9. Process/Thread
-
-# done
+33. dom event model

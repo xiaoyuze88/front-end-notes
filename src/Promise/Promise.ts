@@ -7,8 +7,8 @@ export class Promise<T = any> {
   private state: "fulfilled" | "rejected" | "pending" = "pending";
   private data: T;
   private error: Error;
-  private thenCallbacks: ((data?: T) => void)[] = [];
-  private catchCallbacks: ((error: Error) => void)[] = [];
+  private onFulfilledCallbacks: ((data?: T) => void)[] = [];
+  private onRejectedCallbacks: ((error: Error) => void)[] = [];
 
   static resolve(data): Promise {
     return new Promise((resolve) => resolve(data));
@@ -16,6 +16,41 @@ export class Promise<T = any> {
 
   static reject(error): Promise {
     return new Promise((_, reject) => reject(error));
+  }
+
+  static all(promises: Promise[]) {
+    return new Promise((resolve, reject) => {
+      let fulfilledCount = 0;
+
+      const promiseResults = Array(promises.length).fill(undefined);
+
+      const onFulfilled = (index, data) => {
+        fulfilledCount++;
+        promiseResults[index] = data;
+
+        if (fulfilledCount === promises.length) {
+          resolve(promiseResults);
+        }
+      };
+
+      const onRejected = (error) => {
+        reject(error);
+      };
+
+      promises.forEach((promise, index) => {
+        promise.then((data) => {
+          onFulfilled(index, data);
+        }, reject);
+      });
+    });
+  }
+
+  static race(promises: Promise[]) {
+    return new Promise((resolve, reject) => {
+      promises.forEach((promise) => {
+        promise.then(resolve, reject);
+      });
+    });
   }
 
   private isResolved() {
@@ -28,7 +63,7 @@ export class Promise<T = any> {
 
       this.data = data;
       this.state = "fulfilled";
-      this.thenCallbacks.forEach((callback) => {
+      this.onFulfilledCallbacks.forEach((callback) => {
         setTimeout(() => {
           callback(this.data);
         }, 0);
@@ -40,7 +75,7 @@ export class Promise<T = any> {
 
       this.error = error;
       this.state = "rejected";
-      this.catchCallbacks.forEach((callback) => {
+      this.onRejectedCallbacks.forEach((callback) => {
         setTimeout(() => {
           callback(this.error);
         }, 0);
@@ -52,13 +87,27 @@ export class Promise<T = any> {
   }
 
   // 异步调用
-  then(callback: (data?: T) => Promise | T): Promise {
+  then(
+    onFulfilled?: (data?: T) => Promise | any,
+    onRejected?: (error?: any) => Promise | any
+  ): Promise {
+    // 透传
+    if (typeof onFulfilled !== "function") {
+      onFulfilled = (data) => data;
+    }
+
+    if (typeof onRejected !== "function") {
+      onRejected = (error) => {
+        throw error;
+      };
+    }
+
     let _resolve: Parameters<PromiseCallback>[0];
     let _reject: Parameters<PromiseCallback>[1];
 
-    const cb = (data?: T) => {
+    const handleFulfilled = (data?: T) => {
       try {
-        const response = callback(data);
+        const response = onFulfilled(data);
 
         if (response instanceof Promise) {
           response.then(_resolve).catch(_reject);
@@ -70,48 +119,32 @@ export class Promise<T = any> {
       }
     };
 
+    const handleRejection = (error?: any) => {
+      try {
+        const response = onRejected(error);
+
+        if (response instanceof Promise) {
+          response.then(_resolve, _reject);
+        } else {
+          _resolve(response);
+        }
+      } catch (err) {
+        _reject(err);
+      }
+    };
+
     switch (this.state) {
       case "pending":
-        this.thenCallbacks.push(cb);
+        this.onFulfilledCallbacks.push(handleFulfilled);
+        this.onRejectedCallbacks.push(handleRejection);
         break;
       case "fulfilled":
         setTimeout(() => {
-          cb(this.data);
+          handleFulfilled(this.data);
         }, 0);
-        break;
-    }
-
-    return new Promise((resolve, reject) => {
-      _resolve = resolve;
-      _reject = reject;
-    });
-  }
-
-  catch(callback: (error: Error) => Promise | T): Promise {
-    let _resolve: Parameters<PromiseCallback>[0];
-    let _reject: Parameters<PromiseCallback>[1];
-
-    const cb = (error) => {
-      try {
-        const response = callback(error);
-
-        if (response instanceof Promise) {
-          response.then(_resolve).catch(_reject);
-        } else {
-          _resolve(response);
-        }
-      } catch (err) {
-        _reject(err);
-      }
-    };
-
-    switch (this.state) {
-      case "pending":
-        this.catchCallbacks.push(cb);
-        break;
       case "rejected":
         setTimeout(() => {
-          callback(this.error);
+          handleRejection(this.error);
         }, 0);
         break;
     }
@@ -122,7 +155,13 @@ export class Promise<T = any> {
     });
   }
 
-  // finally(callback: () => Proimse | void): Proimse {
+  catch(onRejected?: (error: Error) => Promise | T): Promise {
+    return this.then(null, onRejected);
+  }
 
-  // }
+  finally(callback: () => Promise | void): Promise {
+    const handler: any = () => callback();
+
+    return this.then(handler, handler);
+  }
 }
