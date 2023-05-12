@@ -65,4 +65,4 @@ export const preOrderIterator_iteration = <T = number>(
 };
 
 // test case
-// preOrderIterator(testNodes.treeFullDeep, (val) => console.log(val), "iteration");
+preOrderIterator(testNodes.tree1, (val) => console.log(val), "iteration");

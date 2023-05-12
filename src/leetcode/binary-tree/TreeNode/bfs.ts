@@ -50,5 +50,5 @@ export const bfs_iteration = <T = number>(tree: TreeNode<T>, cb: TreeNodeIterato
 };
 
 // test case
-// bfs(testNodes.tree1, (val) => console.log(val), "iteration");
+bfs(testNodes.tree1, (val) => console.log(val), "iteration");
 // preOrderIterator2(testNodes.treeFull, (val) => console.log(val));
