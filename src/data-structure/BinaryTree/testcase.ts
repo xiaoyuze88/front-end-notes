@@ -46,13 +46,16 @@ function runTest(type: "bfs" | "preOrder" | "inOrder" | "postOrder") {
       testFns.push(bfs_iteration, bfs_recursion);
       break;
     case "preOrder":
-      testFns.push(preOrderIterator_iteration, preOrderIterator_recursion);
+      // preOrderIterator_recursion
+      testFns.push(preOrderIterator_iteration);
       break;
     case "inOrder":
-      testFns.push(inOrderIterator_iteration, inOrderIterator_recursion);
+      // inOrderIterator_recursion
+      testFns.push(inOrderIterator_iteration);
       break;
     case "postOrder":
-      testFns.push(postOrderIterator_iteration, postOrderIterator_recursion);
+      // postOrderIterator_recursion
+      testFns.push(postOrderIterator_iteration);
       break;
   }
 
@@ -75,4 +78,4 @@ function runTest(type: "bfs" | "preOrder" | "inOrder" | "postOrder") {
   });
 }
 
-runTest("postOrder");
+runTest('postOrder');

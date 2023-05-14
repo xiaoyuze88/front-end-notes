@@ -26,14 +26,9 @@ csrf
 
 
 <!-- 算法 -->
-32. 快排、并归排序
-34. 二叉树 - dfs - 前序/中序/后序
-35. 二叉树 - bfs
-36. 图 - dfs
-37. 图 - bfs
-38. 图 - 并查集 (union-find)
-39. 单调栈
 40. 堆/优先级队列
+并归排序
+快排
 
 <!-- 低优 -->
 10. webpack
@@ -44,18 +39,28 @@ csrf
 
 # ongoing
 <!-- 网络 -->
-2. tcp
-1. http2/3
-4. https
 24. dns
 25. 4层/7层均衡负载区别？
-18. 强缓存、协议缓存
 13. LRU缓存算法？
-14. TCP滑动窗口？
-3. browser cache
 
 # done
 5. promise
 6. event-loop
 9. Process/Thread
 33. dom event model
+
+<!-- 网络 -->
+2. tcp
+14. TCP滑动窗口？
+18. 强缓存、协议缓存
+4. https
+1. http2/3
+
+<!-- 算法 -->
+34. 二叉树 - dfs - 前序/中序/后序 
+35. 二叉树 - bfs
+36. 图 - dfs
+37. 图 - bfs
+38. 图 - 并查集 (union-find)
+39. 单调栈
+40. 堆/优先级队列

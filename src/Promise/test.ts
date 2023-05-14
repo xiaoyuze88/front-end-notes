@@ -1,5 +1,5 @@
 // import promisesAplusTests from "promises-aplus-tests";
-// import { Promise } from "./Promise";
+import { Promise } from "./Promise";
 
 // promisesAplusTests(Promise, function(err) {
 //   // All done; output is in the console. Or check `err` for number of failures.
@@ -8,69 +8,70 @@
 //   }
 // });
 
-// const promise = new Promise((resolve, reject) => {
-//   console.log("kick off");
+const promise = new Promise((resolve, reject) => {
+  console.log("kick off");
 
-//   setTimeout(() => {
-//     // if (Math.random() > 0.5) {
-//     //   return reject("oops");
-//     // }
+  setTimeout(() => {
+    // if (Math.random() > 0.5) {
+    //   return reject("oops");
+    // }
 
-//     resolve("helloworld");
-//   }, 1000);
-// });
+    resolve("helloworld");
+  }, 1000);
+});
 
-// // A
-// promise
-//   .then((data) => {
-//     console.log("promise 1 then data: ", data);
+// A
+promise
+  .then((data) => {
+    console.log("promise 1 then data: ", data);
 
-//     return new Promise((resolve, reject) => {
-//       setTimeout(() => {
-//         // resolve(data + "2");
-//         reject(data + "2");
-//       }, 1000);
-//     });
-//   })
-//   // B
-//   .then((data) => {
-//     console.log("promise 2 then data: ", data);
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        // resolve(data + "2");
+        reject(data + "2");
+      }, 1000);
+    });
+  })
+  // B
+  .then((data) => {
+    console.log("promise 2 then data: ", data);
 
-//     return new Promise((resolve) => {
-//       setTimeout(() => {
-//         resolve(data + "3");
-//       }, 1000);
-//     });
-//   })
-//   // C
-//   .then((ok) => {
-//     // return new P
-//     console.log("final then", ok);
-//   })
-//   // C
-//   // .catch((error) => {
-//   //   console.log("catch error", error);
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(data + "3");
+      }, 1000);
+    });
+  })
+  // C
+  .then((ok) => {
+    // return new P
+    console.log("final then", ok);
+  })
+  // C
+  .catch((error) => {
+    console.log("catch error", error);
 
-//   //   return new Promise((resolve) => {
-//   //     setTimeout(() => {
-//   //       resolve("resolve after reject");
-//   //     }, 1000);
-//   //   });
-//   // })
-//   // C
-//   .catch()
-//   // ()
-//   // D
-//   .then(
-//     (data) => {
-//       console.log("real final", data);
-//     },
-//     (error) => {
-//       console.error('error', error);
-//     }
-//   ).finally(() => {
-//     console.log('finally')
-//   })
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve("resolve after reject");
+      }, 1000);
+    });
+  })
+  // C
+  // .catch()
+  // ()
+  // D
+  .then(
+    (data) => {
+      console.log("real final", data);
+    },
+    (error) => {
+      console.error("error", error);
+    }
+  )
+  .finally(() => {
+    console.log("finally");
+  });
 
 // const genPromise = (data, duration) => {
 //   return new Promise((resolve) => {
@@ -87,49 +88,49 @@
 //   console.timeEnd("race");
 // });
 
-// sync 1
-console.log("script start");
+// // sync 1
+// console.log("script start");
 
-// @ts-ignore
-setImmediate(() => {
-  console.log("Immediate");
-});
+// // @ts-ignore
+// setImmediate(() => {
+//   console.log("Immediate");
+// });
 
-process.nextTick(() => {
-  console.log("nextTick");
-})
+// process.nextTick(() => {
+//   console.log("nextTick");
+// })
 
-async function async1() {
-  await async2();
-  // micro 1
-  console.log("async1 end");
-}
-async function async2() {
-  // sync 2
-  console.log("async2 end");
-}
-async1();
+// async function async1() {
+//   await async2();
+//   // micro 1
+//   console.log("async1 end");
+// }
+// async function async2() {
+//   // sync 2
+//   console.log("async2 end");
+// }
+// async1();
 
-setTimeout(function() {
-  // macro 1
-  console.log("setTimeout");
-}, 0);
+// setTimeout(function() {
+//   // macro 1
+//   console.log("setTimeout");
+// }, 0);
 
-new Promise((resolve) => {
-  // sync 3
-  console.log("Promise");
-  resolve();
-})
-  .then(function() {
-    // micro 2
-    console.log("promise1");
-  })
-  .then(function() {
-    console.log("promise2");
-  });
+// new Promise((resolve) => {
+//   // sync 3
+//   console.log("Promise");
+//   resolve();
+// })
+//   .then(function() {
+//     // micro 2
+//     console.log("promise1");
+//   })
+//   .then(function() {
+//     console.log("promise2");
+//   });
 
-// sync 4
-console.log("script end");
+// // sync 4
+// console.log("script end");
 
 // script start
 // async2 end
@@ -153,7 +154,6 @@ console.log("script end");
 //     console.log('immediate');
 //   });
 // });
-
 
 // setImmediate(() => {
 //   console.log('immediate');
