@@ -1,13 +1,11 @@
 # todos
 
 <!-- 浏览器原理 -->
-7. cors
-8. what happened when input url?
-12. render tree
 11. import/export/require
 21. 小程序原理
 
 <!-- 安全 -->
+7. cors
 iframe
 跨域
 same site cookie
@@ -22,9 +20,6 @@ csrf
 30. 内存计算、内存管理
 31. Number问题（精度，浮点数，byte） -- https://juejin.cn/post/6991844682066034718
 
-
-
-
 <!-- 算法 -->
 40. 堆/优先级队列
 并归排序
@@ -38,10 +33,15 @@ csrf
 19. throttle/debounce
 
 # ongoing
+<!-- 浏览器原理 -->
+8. what happened when input url?
+12. render tree
+
 <!-- 网络 -->
 24. dns
 25. 4层/7层均衡负载区别？
 13. LRU缓存算法？
+
 
 # done
 5. promise
