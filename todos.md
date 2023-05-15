@@ -4,13 +4,6 @@
 11. import/export/require
 21. 小程序原理
 
-<!-- 安全 -->
-7. cors
-iframe
-跨域
-same site cookie
-csrf
-
 <!-- react -->
 23. react原理
 
@@ -64,3 +57,11 @@ csrf
 38. 图 - 并查集 (union-find)
 39. 单调栈
 40. 堆/优先级队列
+
+<!-- 安全 -->
+cors
+iframe
+跨域
+same site cookie
+csrf
+域名（dns）挟持
