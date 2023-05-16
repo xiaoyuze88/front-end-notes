@@ -14,7 +14,7 @@
 31. Number问题（精度，浮点数，byte） -- https://juejin.cn/post/6991844682066034718
 
 <!-- 算法 -->
-40. 堆/优先级队列
+
 并归排序
 快排
 
@@ -26,6 +26,8 @@
 19. throttle/debounce
 
 # ongoing
+40. 堆/优先级队列
+
 <!-- 浏览器原理 -->
 8. what happened when input url?
 12. render tree
