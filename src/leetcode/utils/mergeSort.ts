@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 export const mergeSort = (array: number[]) => {
   if (array.length <= 1) return array;
 
