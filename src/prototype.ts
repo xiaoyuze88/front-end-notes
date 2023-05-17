@@ -1,46 +1,46 @@
-function Parent() {
-  this.name = "Paul";
-  this.age = 30;
-  this.job = 'engineer'
-}
+// function Parent() {
+//   this.name = "Paul";
+//   this.age = 30;
+//   this.job = 'engineer'
+// }
 
-Parent.prototype = {
-  constructor: Parent,
-  sayHi() {
-    console.log(`hi, i am ${this.name}, i'm ${this.age} years old`);
-  }
-};
+// Parent.prototype = {
+//   constructor: Parent,
+//   sayHi() {
+//     console.log(`hi, i am ${this.name}, i'm ${this.age} years old`);
+//   }
+// };
 
-function Child() {
-  Parent.call(this);
+// function Child() {
+//   Parent.call(this);
 
-  this.name = "Tom";
-  this.age = 5;
-  this.job = null
-}
+//   this.name = "Tom";
+//   this.age = 5;
+//   this.job = null
+// }
 
-// Child.prototype = new Parent();
-// Child.prototype.constructor = Child;
-Child.prototype = Object.create(Parent.prototype);
+// // Child.prototype = new Parent();
+// // Child.prototype.constructor = Child;
+// Child.prototype = Object.create(Parent.prototype);
 
-Child.prototype.sayChildHi = () => {
-  console.log("hi i am child");
-};
+// Child.prototype.sayChildHi = () => {
+//   console.log("hi i am child");
+// };
 
-const parent = new Parent();
-const child = new Child();
+// const parent = new Parent();
+// const child = new Child();
 
-parent.sayHi();
+// parent.sayHi();
 
-// parent.sayChildHi();
+// // parent.sayChildHi();
 
-child.sayHi();
-child.sayChildHi();
+// child.sayHi();
+// child.sayChildHi();
 
-Child.prototype.__proto__ = Parent.prototype;
-const child = new Child();
+// Child.prototype.__proto__ = Parent.prototype;
+// const child = new Child();
 
-child.__proto__.__proto__ = Child.prototype.__proto__ = Parent.prototype;
+// child.__proto__.__proto__ = Child.prototype.__proto__ = Parent.prototype;
 
 
-debugger;
+// debugger;

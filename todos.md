@@ -4,6 +4,9 @@
 11. import/export/require
 21. 小程序原理
 
+<!-- js -->
+deepClone
+
 <!-- react -->
 23. react原理
 
@@ -11,7 +14,7 @@
 20. Object.observe / Proxy
 22. localStorage/sessionStorage
 30. 内存计算、内存管理
-31. Number问题（精度，浮点数，byte） -- https://juejin.cn/post/6991844682066034718
+
 
 <!-- 算法 -->
 
@@ -26,11 +29,7 @@
 19. throttle/debounce
 
 # ongoing
-40. 堆/优先级队列
 
-<!-- 浏览器原理 -->
-8. what happened when input url?
-12. render tree
 
 <!-- 网络 -->
 25. 4层/7层均衡负载区别？
@@ -59,6 +58,11 @@
 38. 图 - 并查集 (union-find)
 39. 单调栈
 40. 堆/优先级队列
+40. 堆/优先级队列
+
+<!-- 浏览器原理 -->
+8. what happened when input url?
+12. render tree
 
 <!-- 安全 -->
 cors
@@ -67,3 +71,6 @@ iframe
 same site cookie
 csrf
 域名（dns）挟持
+
+<!-- js底层 -->
+31. Number问题（精度，浮点数，byte） -- https://juejin.cn/post/6991844682066034718
