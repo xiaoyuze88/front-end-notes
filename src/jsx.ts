@@ -1,7 +1,9 @@
+type JSXChild = string | JSX;
+
 interface JSX {
   type: "string";
   props: {
-    children?: string | (string | JSX)[];
+    children?: JSXChild | JSXChild[];
     [key: string]: any;
   };
 }
@@ -20,6 +22,20 @@ const jsx = {
   props: {
     children: [
       "Hello, this is my ",
+      [
+        {
+          type: "span",
+          props: {
+            children: "1"
+          }
+        },
+        {
+          type: "span",
+          props: {
+            children: "2"
+          }
+        }
+      ],
       {
         type: "a",
         props: {
@@ -47,12 +63,36 @@ function createNode(jsx: JSX): JsxNode {
   };
 }
 
-function render(jsx: JSX) {
-  const node = createNode(jsx);
+function createElement(jsx: JSX): HTMLElement {
+  const element = document.createElement(jsx.type);
 
-  
+  const { children, ...props } = jsx.props || {};
+
+  Object.keys(props).forEach((key) => {
+    const value = props[key];
+
+    element.setAttribute(key, value);
+  });
+
+  return element;
 }
 
-function doRender() {
+function render(jsx: JSX): HTMLElement {
+  // const node = createNode(jsx);
+
+  const root = createElement(jsx);
+
   
+
+
+  return root;
 }
+
+function dfs() {
+
+}
+
+function backtrace() {
+
+}
+
