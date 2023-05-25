@@ -1,7 +1,7 @@
 # todos
 
 <!-- 浏览器原理 -->
-11. import/export/require
+
 21. 小程序原理
 
 <!-- js -->
@@ -22,7 +22,9 @@ deepClone
 快排
 
 <!-- 低优 -->
+11. import/export/require
 10. webpack
+tree shaking
 15. webp
 16. flex
 17. 长列表
