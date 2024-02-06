@@ -8,7 +8,10 @@ export class ListNode<T = number> {
   }
 }
 
-export const arrayToListNode = <T = number>(array: T[], reverse?: boolean): ListNode<T> | null => {
+export const arrayToListNode = <T = number>(
+  array: T[],
+  reverse?: boolean
+): ListNode<T> | null => {
   if (!array.length) return null;
 
   let head = new ListNode<T>(array[0]);
@@ -41,6 +44,26 @@ export const listNodeToArray = <T = number>(listNode: ListNode<T>): T[] => {
   });
 
   return array;
+};
+
+export const parseNumberStringFromListNode = (
+  listNode: ListNode<number>
+): string => {
+  const array = listNodeToArray(listNode);
+
+  // 去掉前面补的0
+  let number = array.reverse().join("");
+
+  let firstNoneZeroIndex = -1;
+
+  for (let i = 0, l = number.length; i < l; i++) {
+    if (+number[i] != 0) {
+      firstNoneZeroIndex = i;
+      break;
+    }
+  }
+
+  return number.substring(firstNoneZeroIndex);
 };
 
 export const printListNode = <T = number>(listNode: ListNode<T>): void => {
