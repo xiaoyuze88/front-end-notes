@@ -1,6 +1,6 @@
-// 找出所有相加之和为 n 的 k 个数的组合，且满足下列条件：
-
 import { printResult } from "../utils";
+
+// 找出所有相加之和为 n 的 k 个数的组合，且满足下列条件：
 
 // 只使用数字1到9
 // 每个数字 最多使用一次
@@ -72,7 +72,14 @@ function backtrack(
     combination.add(i);
     combinationSum += i;
     // 如果match，说明当前前缀下其余的都不用找了
-    const isMatch = backtrack(k, n, i + 1, combinations, combination, combinationSum);
+    const isMatch = backtrack(
+      k,
+      n,
+      i + 1,
+      combinations,
+      combination,
+      combinationSum
+    );
     // 需要先复原combination再break，上层还在用呢
     combination.delete(i);
     combinationSum -= i;
@@ -87,6 +94,6 @@ printResult(
   [
     [1, 2, 6],
     [1, 3, 5],
-    [2, 3, 4]
+    [2, 3, 4],
   ]
 );
