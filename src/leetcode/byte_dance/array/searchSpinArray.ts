@@ -31,6 +31,7 @@ import { printResult } from "../../utils";
 // 题目数据保证 nums 在预先未知的某个下标上进行了旋转
 // -104 <= target <= 104
 
+// 二分法+左右序列判断+边界场景判断
 function search(nums: number[], target: number): number {
   if (nums.length === 1) {
     return nums[0] === target ? 0 : -1;
@@ -42,97 +43,77 @@ function search(nums: number[], target: number): number {
   while (left <= right) {
     let mid = left + Math.floor((right - left) / 2);
 
-    console.log("mid", {
-      mid,
-      left,
-      right,
-    });
+    const m = nums[mid];
+    const l = nums[left];
+    const r = nums[right];
+
+    // console.log(`current:
+    // left=> index:${left},value: ${l};
+    // mid=> index:${mid},value: ${m};
+    // right=> index:${right},value: ${r};
+    // `);
+
+    // 正好命中，直接退出
+    if (m === target) return mid;
+    if (l === target) return left;
+    if (r === target) return right;
 
     // 已到左边界
     if (mid === left) {
-      console.log("bordered", { mid, left, right });
+      // console.log("bordered", { mid, left, right });
 
-      if (nums[mid] === target) return mid;
-      if (nums[right] === target) return right;
+      if (m === target) return mid;
+      if (r === target) return right;
 
       return -1;
     }
 
-    if (nums[mid] === target) return mid;
+    // 在左序列
+    if (m > l && m > r) {
+      // 在左序列的话，右边还有比mid大的，左边都是比mid小的，右边也有比mid小的
 
-    // 说明mid是边界，左侧都是升序的,右侧也都是升序的，mid为最小值
-    if (nums[mid - 1] > nums[mid]) {
-      // 可以判断下最后一个值跟target的大小比较，可以判断target在左边还是右边
-      if (nums[right] === target) return right;
-      // 左侧为最大值，如果target比它大则不存
-      if (nums[mid - 1] < target) return -1;
-      // mid为最小值，比它还小肯定不存在
-      if (nums[mid] > target) return -1;
-
-      // 最后一个为右侧最大值，如果比target小，则必定在左侧
-      if (nums[right] < target) {
-        right = mid;
-      }
-      // 否则必定在右侧
-      else {
+      // 比mid大，只可能在右边
+      if (target > m) {
         left = mid;
       }
-      continue;
-    }
-    // 说明mid是边界，右侧都是升序的，左侧也都是升序的，mid为最大值
-    else if (nums[mid + 1] < nums[mid]) {
-      // mid为最大值
-      if (nums[mid] < target) return -1;
-      // 右侧为最小值，比它还小就不存在了
-      if (nums[mid + 1] > target) return -1;
-      if (nums[right] === target) return right;
-
-      // 可以判断下最后一个值跟target的大小比较，可以判断target在左边还是右边
-      // 最后一个为右侧最大值，如果比target小，则必定在左侧
-      if (nums[right] < target) {
-        right = mid;
-      }
-      // 否则必定在右侧
+      // 比mid小，有可能在左右可能在右
       else {
-        left = mid;
-      }
-
-      continue;
-    }
-
-    // 普通场景，还没办法判断在哪边？
-    // 如果比mid大，那么只有两种可能，要么在右边，要么不存
-
-    // 如果比mid大
-    if (nums[mid] < target) {
-      if (nums[right] === target) return right;
-
-      // 比右边界大
-      if (nums[right] < target) {
-        // 比mid大,比右边界也大，比左边界还大，那么只可能在右边
-        if (nums[left] < target) {
-          left = mid;
-        }
-        // 比mid大，比右边界大，比左边界小，在左侧？
-        else {
+        // 如果比r大，说明只能在左序列中
+        if (target > r) {
           right = mid;
         }
-      }
-      // 比mid大，比右边界小，在右侧
-      else {
-        left = mid;
+        // 比r小，只可能在右边
+        else {
+          left = mid;
+        }
       }
     }
-    // 比mid小
-    else {
-      if (nums[left] === target) return left;
+    // 右序列
+    else if (m < l && m < r) {
+      // 在右序列的话，右边只有比mid大的，左边有比mid大的也有比mid 小的
 
-      // 比mid小，同时比左边界还小，肯定在右边
-      if (nums[left] > target) {
-        left = mid;
+      // 比mid小，只可能在左边
+      if (target < m) {
+        right = mid;
       }
-      // 比mid小，同时比左边界大，肯定在左边
+      // 比mid大，可能在左也可能在右
       else {
+        // 比l大，只可能在左边
+        if (target > l) {
+          right = mid;
+        }
+        // 比mid大，但是比l小，只能在右边
+        else {
+          left = mid;
+        }
+      }
+    }
+    // m >= l && m <= r，说明当前已经是正常序列
+    else {
+      // 右边
+      if (target > m) {
+        left = mid;
+      } else {
         right = mid;
       }
     }
@@ -145,4 +126,5 @@ function search(nums: number[], target: number): number {
 // printResult(search, [[4, 5, 6, 7, 0, 1, 2], 3], -1);
 // printResult(search, [[1], 0], -1);
 // printResult(search, [[3, 5, 1], 3], 0);
-printResult(search, [[4, 5, 6, 7, 8, 1, 2, 3], 8], 4);
+// printResult(search, [[4, 5, 6, 7, 8, 1, 2, 3], 8], 4);
+printResult(search, [[5, 1, 3], 5], 0);
