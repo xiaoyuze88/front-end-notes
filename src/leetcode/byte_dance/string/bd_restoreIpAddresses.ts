@@ -35,13 +35,13 @@ printResult(
   ["255.255.11.135", "255.255.111.35"],
   eqList
 );
-// printResult(restoreIpAddresses, ["0000"], ["0.0.0.0"], eqList);
-// printResult(
-//   restoreIpAddresses,
-//   ["101023"],
-//   ["1.0.10.23", "1.0.102.3", "10.1.0.23", "10.10.2.3", "101.0.2.3"],
-//   eqList
-// );
+printResult(restoreIpAddresses, ["0000"], ["0.0.0.0"], eqList);
+printResult(
+  restoreIpAddresses,
+  ["101023"],
+  ["1.0.10.23", "1.0.102.3", "10.1.0.23", "10.10.2.3", "101.0.2.3"],
+  eqList
+);
 
 // 每个整数位于 0 到 255 之间组成，且不能含有前导 0
 function isValidIpWidget(s: string) {
@@ -56,7 +56,7 @@ function isValidIpWidget(s: string) {
 }
 
 // 核心就是回溯
-function restoreIpAddresses(s: string): string[] {
+function restoreIpAddresses2(s: string): string[] {
   const results: Set<string> = new Set<string>();
 
   function backTrace({
@@ -116,6 +116,45 @@ function restoreIpAddresses(s: string): string[] {
       currentIndex: 1,
     });
   }
+
+  return Array.from(results);
+}
+
+function restoreIpAddresses(s: string): string[] {
+  const results = new Set<string>();
+
+  function backTrace({
+    string,
+    stack,
+  }: {
+    string: string;
+    stack: string[];
+  }) {
+    if (stack.length === 4 && !string) {
+      results.add(stack.join('.'));
+      return;
+    }
+
+    for (let i = 1, l = string.length; i <= l; i++) {
+      const prefix = string.substring(0, i);
+
+      if (isValidIpWidget(prefix)) {
+        stack.push(prefix);
+
+        backTrace({
+          stack,
+          string: string.substring(i),
+        });
+
+        stack.pop();
+      }
+    }
+  }
+
+  backTrace({
+    string: s,
+    stack: [],
+  });
 
   return Array.from(results);
 }

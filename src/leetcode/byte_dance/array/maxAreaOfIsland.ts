@@ -47,7 +47,7 @@ const directions = [
   },
 ];
 
-function maxAreaOfIsland(grid: number[][]): number {
+function maxAreaOfIsland2(grid: number[][]): number {
   let x = 0;
   let y = 0;
 
@@ -60,14 +60,6 @@ function maxAreaOfIsland(grid: number[][]): number {
 
   let stack = [];
   let islandRecord = [];
-
-  const search = (y: number, x: number) => {};
-
-  // while (y <= y_len) {
-  //   while (x <= x_len) {
-
-  //   }
-  // }
 
   for (let y = 0; y < y_len; y++) {
     for (let x = 0; x < x_len; x++) {
@@ -129,6 +121,72 @@ function maxAreaOfIsland(grid: number[][]): number {
   }
 
   return maxSize;
+}
+
+function maxAreaOfIsland(grid: number[][]): number {
+  const xLen = grid[0].length;
+  const yLen = grid.length;
+
+  let maxArea = 0;
+
+  let stack: string[] = [];
+
+  const markSet = new Set<string>();
+
+  const genKey = (x: number, y: number) => `${x}|${y}`;
+
+  for (let y = 0; y < yLen; y++) {
+    for (let x = 0; x < xLen; x++) {
+      const currentKey = genKey(x, y);
+
+      if (markSet.has(currentKey)) continue;
+
+      // 找到一个，然后推入堆栈，遍历周边所有陆地
+      if (grid[y][x]) {
+        let area = 1;
+
+        stack.push(currentKey);
+        markSet.add(currentKey);
+
+        // console.log('find', stack);
+
+        while (stack.length) {
+          const current = stack.pop();
+
+          // console.log('current', stack);
+
+          const [x, y] = current.split('|');
+
+          for (let i = 0, l = directions.length; i < l; i++) {
+            const { x: deltaX, y: deltaY } = directions[i];
+
+            const newX = +x + deltaX;
+            const newY = +y + deltaY;
+
+            const key = genKey(newX, newY);
+
+            if (grid?.[newY]?.[newX] && !markSet.has(key)) {
+              // 记录，避免重复计算
+              markSet.add(key);
+              stack.push(key);
+              area++;
+            }
+          }
+        }
+
+        // console.log('done stack', area);
+
+        if (area > maxArea) {
+          maxArea = area;
+        }
+
+        // reset
+        stack = [];
+      }
+    }
+  }
+
+  return maxArea;
 }
 
 printResult(

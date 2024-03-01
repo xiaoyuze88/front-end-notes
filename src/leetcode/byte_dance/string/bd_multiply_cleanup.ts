@@ -120,7 +120,6 @@ const parseNumberStringFromListNode2 = (
 //       break;
 //     }
 //   }
-
 //   return number.substring(firstNoneZeroIndex);
 // };
 
@@ -168,7 +167,7 @@ function addNode(node1: ListNode2, node2: ListNode2): ListNode2 {
   return start;
 }
 
-function multiply(num1: string, num2: string) {
+function multiply2(num1: string, num2: string) {
   const len_1 = num1.length;
   const len_2 = num2.length;
 
@@ -211,10 +210,88 @@ function multiply(num1: string, num2: string) {
   return parseNumberStringFromListNode2(count);
 }
 
+// 核心是大数加法、乘法，用字符串处理
+function multiply(num1: string, num2: string) {
+  if (num1 === '0' || num2 === '0') return '0';
+
+  const add = (num1: string, num2: string) => {
+    // 补齐位数
+    let index = 0;
+    const maxLen = Math.max(num1.length, num2.length);
+
+    let result = '';
+    let carry = 0;
+
+    while(index < maxLen) {
+      let amount = +(num1[num1.length - index - 1] || 0) + +(num2[num2.length - index - 1] || 0) + carry;
+
+      if (amount >= 10) {
+        carry = 1;
+        amount -= 10;
+      } else {
+        carry = 0;
+      }
+
+      result = String(amount) + result;
+      index++;
+    }
+
+    if (carry) {
+      result = String(carry) + result;
+    }
+
+    return result;
+  };
+
+  const multiplyInner = (numAbove: string, numSingle: string, position = 0) => {
+    let result = '';
+    let carry = 0;
+
+    for (let i = numAbove.length - 1; i >= 0; i--) {
+      let amount = +numAbove[i] * +numSingle + carry;
+
+      if (amount >= 10) {
+        carry = Math.floor(amount / 10);
+        amount = amount - carry * 10;
+      } else {
+        carry = 0;
+      }
+
+      result = String(amount) + result;
+    }
+
+    if (carry) {
+      result = String(carry) + result;
+    }
+
+    if (position) {
+      result = result + Array(position).fill(0).join('');
+    }
+
+    return result;
+  };
+
+  let result = '';
+
+  for (let i = 0, l = num2.length; i < l; i++) {
+    const multiplyAmount = multiplyInner(num1, num2[num2.length - i - 1], i);
+
+    // console.log('multiplyAmount', multiplyAmount);
+
+    result = add(result, multiplyAmount);
+
+    // console.log('result', result);
+  }
+
+  return result;
+}
+
 // printResult(multiply, ["2", "3"], "6");
 // printResult(multiply, ["123", "456"], "56088");
 // printResult(multiply, ["123456789", "987654321"], "121932631112635269");
+// printResult(multiply, ["1234", "3245"], "4004330");
 // printResult(multiply, ["10", "10"], "100");
+printResult(multiply, ["9300", "0"], "0");
 // printResult(
 //   multiply,
 //   ["498828660196", "840477629533"],

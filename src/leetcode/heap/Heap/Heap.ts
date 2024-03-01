@@ -1,3 +1,7 @@
+/**
+ * 堆定义：
+ * 1. 完全二叉树
+ */
 export class Heap<T = number> {
   data: T[] = [];
   comparer: (current: T, next: T) => boolean;
@@ -16,7 +20,7 @@ export class Heap<T = number> {
   ) {
     this.comparer = comparer;
 
-    // 构建0
+    // 构建0，这样的话找父节点可以直接 Math.floor(i/2)
     data.unshift(undefined);
 
     this.data = data;
@@ -27,6 +31,7 @@ export class Heap<T = number> {
   // buildMinHeap
   private buildHeap() {
     // 从后往前，从上往下
+    // or 从前往后，从下往上
     for (let i = Math.floor(this.size / 2); i >= 1; i--) {
       this.shiftDown(i);
     }

@@ -24,7 +24,7 @@ import { printResult } from "../../utils";
 // -109 <= nums[i] <= 109
 
 // 双指针
-function findLengthOfLCIS(nums: number[]): number {
+function findLengthOfLCIS2(nums: number[]): number {
   let left = 0;
   let right = 1;
 
@@ -67,6 +67,43 @@ function findLengthOfLCIS(nums: number[]): number {
   }
 
   return maxLen;
+}
+
+function findLengthOfLCIS(nums: number[]): number {
+  if (nums.length === 1) return 1;
+
+  let l = 0;
+
+  let maxLength = 1;
+
+  while (l < nums.length - 1) {
+    let r = l + 1;
+
+    // 当前l满足，才往下走
+    if (nums[l] < nums[r]) {
+      // r一直右移
+      while (r < nums.length) {
+        // 当右边满足条件，则往右移
+        if (nums[r + 1] > nums[r]) {
+          r++;
+        }
+        // 否则，记录长度，l移动到r，r移到r+1
+        else {
+          const len = r - l + 1;
+          if (len > maxLength) {
+            maxLength = len;
+          }
+          l = r;
+          r += 1;
+          break;
+        }
+      }
+    }
+
+    l++;
+  }
+
+  return maxLength;
 }
 
 printResult(findLengthOfLCIS, [[1, 3, 5, 4, 7]], 3);

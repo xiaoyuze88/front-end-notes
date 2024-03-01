@@ -26,7 +26,7 @@ import { printResult } from "../../utils";
 // 0 <= s.length <= 5 * 104
 // s 由英文字母、数字、符号和空格组成
 
-function lengthOfLongestSubstring(string: string) {
+function lengthOfLongestSubstring2(string: string) {
   if (string.length <= 1) return string.length;
 
   let i = 0;
@@ -62,6 +62,51 @@ function lengthOfLongestSubstring(string: string) {
   }
 
   return max;
+}
+
+function lengthOfLongestSubstring(string: string): number {
+  if (string.length <= 1) return string.length;
+
+  let maxCount = 0;
+
+  let l = 0;
+  let r = 1;
+
+  const updateMax = (current: number) => {
+    if (current >= maxCount) maxCount = current;
+  };
+  
+  while (r <= string.length) {
+    const s = string.substring(l, r);
+
+    // 当前字符串不包含右指针
+    if (!s.includes(string[r])) {
+      if (r >= string.length) {
+        // console.log('r out of range, update max', r - l);
+        updateMax(r - l);
+        break;
+      }
+
+      r++;
+      // console.log('move r', r);
+
+      
+    } else {
+      // console.log('update current', r - l);
+      updateMax(r - l);
+
+      l++;
+
+      // console.log('move l', l);
+
+      if (l >= r) {
+        r++;
+        // console.log('move r too', r);
+      }
+    }
+  }
+
+  return maxCount;
 }
 
 printResult(lengthOfLongestSubstring, ["abcabcbb"], 3);

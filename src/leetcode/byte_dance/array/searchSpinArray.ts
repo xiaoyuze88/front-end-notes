@@ -32,7 +32,7 @@ import { printResult } from "../../utils";
 // -104 <= target <= 104
 
 // 二分法+左右序列判断+边界场景判断
-function search(nums: number[], target: number): number {
+function search2(nums: number[], target: number): number {
   if (nums.length === 1) {
     return nums[0] === target ? 0 : -1;
   }
@@ -122,9 +122,63 @@ function search(nums: number[], target: number): number {
   return -1;
 }
 
-// printResult(search, [[4, 5, 6, 7, 0, 1, 2], 0], 4);
-// printResult(search, [[4, 5, 6, 7, 0, 1, 2], 3], -1);
-// printResult(search, [[1], 0], -1);
-// printResult(search, [[3, 5, 1], 3], 0);
-// printResult(search, [[4, 5, 6, 7, 8, 1, 2, 3], 8], 4);
+// 要求 O(log n)，必是二分法，根据中点和两边界情况可以判断 mid 位于哪个序列当前，从而判断 target 在左还是右
+function search(nums: number[], target: number): number {
+  if (nums.length === 1) return nums[0] === target ? 0 : -1;
+
+  let left = 0;
+  let right = nums.length - 1;
+
+  while (left < right) {
+    let mid = Math.floor((right - left) / 2) + left;
+
+    if (nums[mid] === target) return mid;
+    if (nums[left] === target) return left;
+    if (nums[right] === target) return right;
+
+    // 说明当前是完整序列
+    if (nums[mid] < nums[right] && nums[mid] > nums[left]) {
+      // 右边
+      if (nums[mid] < target) {
+        left = mid;
+      } else {
+        right = mid;
+      }
+    }
+    // 说明mid在乱序的左序列之中
+    else if (nums[mid] > nums[left]) {
+      // 比right还小，说明只可能在右边
+      // 或者比mid大，也只能在右边
+      if (target < nums[right] || target > nums[mid]) {
+        left = mid;
+      }
+      // 比right大，比mid小，只可能在左边
+      else if (target < nums[mid]) {
+        right = mid;
+      }
+    }
+    // 说明mid在乱序的右序列中
+    else {
+      // 比left还大，说明只可能在左边
+      // 或者比mid小，也可能在左边
+      if (target > nums[left] || target < nums[mid]) {
+        right = mid;
+      }
+      // 比mid大，且比 left 小，只能在右边
+      else if (target > nums[mid]) {
+        left = mid;
+      }
+    }
+  }
+
+  return -1;
+}
+
+printResult(search, [[4, 5, 6, 7, 0, 1, 2], 0], 4);
+printResult(search, [[4, 5, 6, 7, 0, 1, 2], 3], -1);
+printResult(search, [[1], 0], -1);
+printResult(search, [[3, 5, 1], 3], 0);
+printResult(search, [[4, 5, 6, 7, 8, 1, 2, 3], 8], 4);
 printResult(search, [[5, 1, 3], 5], 0);
+printResult(search, [[1], 1], 0);
+printResult(search, [[2,3,4,5,6,7,8,9,1], 3], 1);
