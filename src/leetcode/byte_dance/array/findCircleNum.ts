@@ -72,7 +72,7 @@ function findCircleNum2(isConnected: number[][]): number {
   return count;
 };
 
-function findCircleNum(isConnected: number[][]): number {
+function findCircleNum1(isConnected: number[][]): number {
   // 依次遍历，对每个点 dfs/bfs，已走过的记录
   const n = isConnected.length;
 
@@ -108,6 +108,11 @@ function findCircleNum(isConnected: number[][]): number {
   }
 
   return count;
+};
+
+// 并查集
+function findCircleNum(isConnected: number[][]): number {
+  
 };
 
 printResult(findCircleNum, [[[1,1,0],[1,1,0],[0,0,1]]], 2);
