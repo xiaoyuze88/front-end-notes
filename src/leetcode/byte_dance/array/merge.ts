@@ -2,6 +2,8 @@
 // https://leetcode.cn/explore/interview/card/bytedance/243/array-and-sorting/1046/
 // 以数组 intervals 表示若干个区间的集合，其中单个区间为 intervals[i] = [starti, endi] 。请你合并所有重叠的区间，并返回 一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间 。
 
+import { printResult } from "../../utils";
+
  
 // 示例 1：
 
@@ -21,7 +23,105 @@
 // intervals[i].length == 2
 // 0 <= starti <= endi <= 104
 function merge(intervals: number[][]): number[][] {
-  Promise.allSettled([]).then(([a]) => {
+  const parent: number[] = [];
+  const rank: number[] = [];
 
-  })  
+  const size = intervals.length;
+
+  const matrix: number[][] = Array(size).fill(0).map(() => Array(size).fill(0));
+
+  const hasOverlap = (i: number, j: number) => {
+    const [startI, endI] = intervals[i];
+    const [startJ, endJ] = intervals[j];
+
+    return Math.max(startI, startJ) <= Math.min(endI, endJ);
+  };
+
+  // 好像还要先构建矩阵出来？
+  for (let i = 0; i < size; i++) {
+    for (let j = 0; j < size; j++) {
+      matrix[i][j] = hasOverlap(i, j) ? 1 : 0;
+    }   
+  }
+
+  for (let i = 0, l = intervals.length; i < l; i++) {
+    parent[i] = i;
+    rank[i] = 1;
+  }
+
+  const find = (i: number) => {
+    let index = i;
+
+    while (index !== parent[index]) {
+      parent[index] = parent[parent[index]];
+      index = parent[index];
+    }
+
+    return index;
+  }
+
+  const union = (x: number, y: number) => {
+    const xRoot = find(x);
+    const yRoot = find(y);
+
+    // rank 标志了某个集合的度量，每当两个树被合并且度量一样时，合入的一方，rank+1
+    if (rank[xRoot] > rank[yRoot]) {
+      parent[yRoot] = xRoot;
+    } else if (rank[xRoot] < rank[yRoot]) {
+      parent[xRoot] = yRoot;
+    } else {
+      // 这里顺序其实不重要，但是要将合入一方的rank+1
+      parent[xRoot] = yRoot;
+
+      rank[yRoot]++;
+    }
+  };
+
+  for (let i = 0; i < size; i++) {
+    for (let j = i + 1; j < size; j++) {
+      if (matrix[i][j]) {
+        union(i, j);
+      }
+    }
+  }
+
+  // console.log('parent', parent);
+
+  const map: {
+    [key: string]: number[];
+  } = {};
+
+  parent.forEach((i, index) => {
+    i = find(i);
+
+    if (!map[i]) map[i] = [];
+
+    map[i].push(index);
+  });
+
+  // console.log('map', map);
+
+  const mergeRange = (indexList: number[]) => {
+    const starts = [];
+    const ends = [];
+
+    indexList.forEach((i) => {
+      const [start, end] = intervals[i]
+
+      starts.push(start);
+      ends.push(end);
+    });
+
+    return [Math.min(...starts), Math.max(...ends)];
+  };
+
+  return Object.keys(map).map((key) => {
+    // 将所有 index 所指向的起止位置合并
+    return mergeRange(map[key]);
+  });
 };
+
+// printResult(merge, [[[1,3],[2,6],[8,10],[15,18]]], [[1,6],[8,10],[15,18]])
+// printResult(merge, [[[1,4],[4,5]]], [[1, 5]])
+printResult(merge, [[[2,3],[4,6],[5,7],[3,4]]], [[2, 7]])
+

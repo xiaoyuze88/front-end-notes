@@ -110,10 +110,111 @@ function findCircleNum1(isConnected: number[][]): number {
   return count;
 };
 
+
+
+
+// const unionFind = new UnionFind(
+//   [
+//     [1, 0, 0, 0, 1, 0],
+//     [0, 1, 0, 0, 0, 1],
+//     [0, 0, 1, 1, 0, 1],
+//     [0, 0, 1, 1, 0, 0],
+//     [1, 0, 0, 0, 1, 0],
+//     [0, 1, 1, 0, 0, 1],
+//   ]
+// )
+
 // 并查集
 function findCircleNum(isConnected: number[][]): number {
+  class UnionFind {
+    matrix: number[][];
+    // parent[i] 代表第 i 个元素的父节点是哪个，parent[i] = i 表示自己就是自己的父节点
+    parent: number[] = [];
+    // parent[i] 代表第 i 个元素所在树的高度
+    rank: number[] = [];
   
+    constructor(matrix: number[][]) {
+      this.matrix = matrix;
+  
+      // 初始化，大家都各自为树
+      for (let i = 0, l = matrix.length; i < l; i++) {
+        this.parent[i] = i;
+        this.rank[i] = 1;
+      }
+    }
+  
+    isConnected(i: number, j: number) {
+      return !!this.matrix[i][j];
+    }
+  
+    // 找i元素对应的根节点
+    find(i: number) {
+      let index = i;
+  
+      while (index !== this.parent[index]) {
+        // 路径压缩，找到parent的parent，将自己挂上去
+        this.parent[index] = this.parent[this.parent[index]];
+        index = this.parent[index];
+      }
+  
+      return index;
+    }
+  
+    union(i: number, j: number) {
+      const rootI = this.find(i);
+      const rootJ = this.find(j);
+
+      // console.log({ rootI, rootJ });
+  
+      if (rootI === rootJ) return;
+
+      // console.log('this.rank', this.rank);
+  
+      // 小的挂到大的下
+      if (this.rank[rootI] > this.rank[rootJ]) {
+        // console.log('combine j to i', { rootI, rootJ });
+        this.parent[rootJ] = rootI;
+      } else {
+        // console.log('combine i to j', { rootI, rootJ });
+        this.parent[rootI] = rootJ;
+      }
+  
+      const sum = this.rank[rootJ] + this.rank[rootI];
+  
+      this.rank[rootI] = this.rank[rootJ] = sum;
+
+      // console.log('after parent', this.parent);
+    }
+  
+    start() {
+      for (let i = 0, l = this.matrix.length; i < l; i++) {
+        for (let j = i + 1; j < l; j++) {
+          // console.log('current', i, j);
+
+          if (this.isConnected(i, j)) {
+            // console.log('isConnected', i, j);
+            this.union(i, j);
+          }
+        }
+      }
+  
+      const set = new Set();
+  
+      this.parent.forEach((i) => {
+        set.add(this.find(i));
+      });
+
+      // console.log('this.parent', this.parent);
+  
+      return set.size;
+    }
+  }
+
+  const unionFind = new UnionFind(isConnected);
+
+  return unionFind.start();
 };
 
 printResult(findCircleNum, [[[1,1,0],[1,1,0],[0,0,1]]], 2);
 printResult(findCircleNum, [[[1,0,0],[0,1,0],[0,0,1]]], 3);
+printResult(findCircleNum, [[[1,0,0,1],[0,1,1,0],[0,1,1,1],[1,0,1,1]]], 1);
