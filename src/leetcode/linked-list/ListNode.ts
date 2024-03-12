@@ -75,10 +75,12 @@ export const iteratorListNode = <T = number>(
   iteratorFn: (value: T) => any
 ) => {
   let current = listNode;
+  let maxCount = 14;
 
-  while (current) {
+  while (current && maxCount) {
     iteratorFn(current.val);
     current = current.next;
+    maxCount--;
   }
 };
 
