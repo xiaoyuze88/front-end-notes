@@ -53,10 +53,10 @@ export const quickSort2 = (array: number[]) => {
   let left = [];
   let right = [];
 
-  for ()
+  // for ()
 
-  quickSort(array, startIndex, left - 1);
-  quickSort(array, left + 1, endIndex);
+  // quickSort(array, startIndex, left - 1);
+  // quickSort(array, left + 1, endIndex);
 
   return array;
 };
