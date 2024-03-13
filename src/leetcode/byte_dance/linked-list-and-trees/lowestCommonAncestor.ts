@@ -33,4 +33,25 @@ function lowestCommonAncestor(
   root: TreeNode | null,
   p: TreeNode | null,
   q: TreeNode | null
-): TreeNode | null {}
+): TreeNode | null {
+  let result: TreeNode = null;
+
+  const dfs = (node: TreeNode): boolean => {
+    if (!node) return false;
+
+    const lSon = dfs(node.left);
+    const rSon = dfs(node.right);
+
+    const isCurrentPOrQ = node.val === p.val || node.val === q.val;
+
+    if ((lSon && rSon) || ((lSon || rSon) && isCurrentPOrQ)) {
+      result = node;
+    }
+
+    return lSon || rSon || isCurrentPOrQ;
+  };
+
+  dfs(root);
+
+  return result;
+}
