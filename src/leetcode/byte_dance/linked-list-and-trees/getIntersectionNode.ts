@@ -2,7 +2,11 @@
 // https://leetcode.cn/explore/interview/card/bytedance/244/linked-list-and-tree/1024/
 // 给你两个单链表的头节点 headA 和 headB ，请你找出并返回两个单链表相交的起始节点。如果两个链表不存在相交节点，返回 null 。
 
-import { ListNode } from "../../linked-list/ListNode";
+import {
+  ListNode,
+  arrayToListNode,
+  iteratorListNode,
+} from "../../linked-list/ListNode";
 
 // 图示两个链表在节点 c1 开始相交：
 
@@ -76,21 +80,32 @@ function getIntersectionNode(
   let aNode = headA;
   let bNode = headB;
 
-  while (aNode && bNode && aNode !== bNode) {
-    aNode = aNode.next;
-    bNode = bNode.next;
-  }
-
-  // 长度相等的话，会满足此条件，从而可直接返回
-  if (aNode && bNode && aNode === bNode) return aNode;
-
-  // 如果不是，此时必定有一个走完了，接到另外一个上面去
-  if (!aNode) aNode = headB;
-  if (!bNode) bNode = headA;
+  const doneMap = { a: false, b: false };
 
   while (aNode !== bNode) {
-    aNode = aNode.next;
-    bNode = bNode.next;
+    // 保证每个只交叉一次
+    if (!aNode.next) {
+      if (!doneMap.a) {
+        doneMap.a = true;
+        aNode = headB;
+      } else {
+        return null;
+      }
+    } else {
+      aNode = aNode.next;
+    }
+
+    // 保证每个只交叉一次
+    if (!bNode.next) {
+      if (!doneMap.b) {
+        doneMap.b = true;
+        bNode = headA;
+      } else {
+        return null;
+      }
+    } else {
+      bNode = bNode.next;
+    }
   }
 
   return aNode;
@@ -102,4 +117,73 @@ const genListNode = (
   posA: number,
   posB: number,
   intersectVal: number
-) => {};
+) => {
+  let headA: ListNode;
+  let headB: ListNode;
+
+  // 不相交
+  if (intersectVal === 0) {
+    headA = arrayToListNode(A);
+    headB = arrayToListNode(B);
+  } else {
+    let intersectionNode: ListNode;
+
+    let currentA: ListNode;
+
+    for (let i = 0, l = A.length; i < l; i++) {
+      if (!headA) {
+        headA = new ListNode(A[i]);
+        currentA = headA;
+      } else {
+        currentA.next = new ListNode(A[i]);
+        currentA = currentA.next;
+      }
+
+      // 跳出点下一个即使入口
+      if (i === posA + 1) {
+        intersectionNode = currentA;
+      }
+    }
+
+    let currentB: ListNode;
+
+    for (let i = 0, l = B.length; i < l; i++) {
+      if (!headB) {
+        headB = new ListNode(B[i]);
+        currentB = headB;
+      } else {
+        // 指向跳出点
+        if (i === posB + 1) {
+          currentB.next = intersectionNode;
+          break;
+        } else {
+          currentB.next = new ListNode(B[i]);
+          currentB = currentB.next;
+        }
+      }
+    }
+
+    // console.log('headA', headA);
+    // iteratorListNode(headA, (v) => console.log(v));
+    // console.log('headB', headB);
+    // iteratorListNode(headB, (v) => console.log(v));
+  }
+
+  return { headA, headB };
+};
+
+const test = (
+  A: number[],
+  B: number[],
+  posA: number,
+  posB: number,
+  intersectVal: number
+) => {
+  const { headA, headB } = genListNode(A, B, posA, posB, intersectVal);
+
+  getIntersectionNode(headA, headB);
+};
+
+// intersectVal = 8, listA = [4,1,8,4,5], listB = [5,6,1,8,4,5], skipA = 2, skipB = 3
+// test([4, 1, 8, 4, 5], [5, 6, 1, 8, 4, 5], 2, 3, 8);
+test([2, 6, 4], [1, 5], 3, 2, 0);
