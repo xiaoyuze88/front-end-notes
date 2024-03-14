@@ -10,9 +10,13 @@ export class Promise<T = any> {
   private onFulfilledCallbacks: ((data?: T) => void)[] = [];
   private onRejectedCallbacks: ((error: Error) => void)[] = [];
 
-  static resolve(data): Promise {}
+  static resolve(data): Promise {
+    return new Promise((resolve) => resolve(data));
+  }
 
-  static reject(error): Promise {}
+  static reject(error): Promise {
+    return new Promise((_, reject) => reject(error));
+  }
 
   static all(promises: Promise[]) {}
 
@@ -20,7 +24,13 @@ export class Promise<T = any> {
 
   private isResolved() {}
 
-  constructor(callback: PromiseCallback<T>) {}
+  constructor(callback: PromiseCallback<T>) {
+    const resolve = (data: T) => {};
+
+    const reject = (error) => {};
+
+    callback();
+  }
 
   // 异步调用
   then(
@@ -32,3 +42,9 @@ export class Promise<T = any> {
 
   finally(callback: () => Promise | void): Promise {}
 }
+
+new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve();
+  }, 1000);
+});

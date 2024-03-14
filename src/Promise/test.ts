@@ -88,49 +88,49 @@ promise
 //   console.timeEnd("race");
 // });
 
-// // sync 1
-// console.log("script start");
+// sync 1
+console.log("script start");
 
-// // @ts-ignore
-// setImmediate(() => {
-//   console.log("Immediate");
-// });
+// @ts-ignore
+setImmediate(() => {
+  console.log("Immediate");
+});
 
-// process.nextTick(() => {
-//   console.log("nextTick");
-// })
+process.nextTick(() => {
+  console.log("nextTick");
+});
 
-// async function async1() {
-//   await async2();
-//   // micro 1
-//   console.log("async1 end");
-// }
-// async function async2() {
-//   // sync 2
-//   console.log("async2 end");
-// }
-// async1();
+async function async1() {
+  await async2();
+  // micro 1
+  console.log("async1 end");
+}
+async function async2() {
+  // sync 2
+  console.log("async2 end");
+}
+async1();
 
-// setTimeout(function() {
-//   // macro 1
-//   console.log("setTimeout");
-// }, 0);
+setTimeout(function() {
+  // macro 1
+  console.log("setTimeout");
+}, 0);
 
-// new Promise((resolve) => {
-//   // sync 3
-//   console.log("Promise");
-//   resolve();
-// })
-//   .then(function() {
-//     // micro 2
-//     console.log("promise1");
-//   })
-//   .then(function() {
-//     console.log("promise2");
-//   });
+new Promise((resolve) => {
+  // sync 3
+  console.log("Promise");
+  resolve();
+})
+  .then(function() {
+    // micro 2
+    console.log("promise1");
+  })
+  .then(function() {
+    console.log("promise2");
+  });
 
-// // sync 4
-// console.log("script end");
+// sync 4
+console.log("script end");
 
 // script start
 // async2 end
