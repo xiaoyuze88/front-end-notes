@@ -22,28 +22,59 @@
 import { TreeNode, arrayToTreeNode } from "../../binary-tree/TreeNode";
 
 function zigzagLevelOrder(root: TreeNode | null): number[][] {
+  if (!root) return [];
+
   const queue: TreeNode[] = [root];
 
-  let fromLeftToRight = true;
+  let levelSize: number;
+
+  const results: number[][] = [];
+
+  let fromLeftToRight = false;
+
+  let level = 0;
 
   while (queue.length) {
-    const first = queue.shift();
+    levelSize = queue.length;
 
-    if (!first) break;
+    // 每层反转
+    fromLeftToRight = !fromLeftToRight;
 
-    console.log("first", first.val);
+    const currentLevelResults = [];
+    const nextLevelQueue = [];
 
-    queue.push(first.left);
-    queue.push(first.right);
+    // console.log(
+    //   "currentLevel",
+    //   level,
+    //   queue.map((node) => node.val),
+    //   `fromLeftToRight? => ${fromLeftToRight}`
+    // );
 
-    if (fromLeftToRight) {
-      fromLeftToRight = false;
+    // queue都是按当前需要输出的方向排好
+    currentLevelResults.push(...queue.map((node) => node.val));
+
+    for (let i = 1; i <= levelSize; i++) {
+      // 下一层是当前queue的逆序，从后往前取
+      const last = queue.pop();
+
+      // 但是要区分从左往右还是从右往左，当前层是从左到右，那么下一层就是从右往左
+      if (fromLeftToRight) {
+        last.right && nextLevelQueue.push(last.right);
+        last.left && nextLevelQueue.push(last.left);
+      } else {
+        last.left && nextLevelQueue.push(last.left);
+        last.right && nextLevelQueue.push(last.right);
+      }
     }
+
+    level++;
+    queue.push(...nextLevelQueue);
+    results.push(currentLevelResults);
   }
 
-  return [];
+  return results;
 }
 
-zigzagLevelOrder(
-  arrayToTreeNode([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
-);
+console.log(zigzagLevelOrder(arrayToTreeNode([3, 9, 20, null, null, 15, 7])));
+console.log(zigzagLevelOrder(arrayToTreeNode([1, 2, 3, 4, null, null, 5])));
+console.log(zigzagLevelOrder(arrayToTreeNode([1, 2, 3, 4, 5, 6, 7])));

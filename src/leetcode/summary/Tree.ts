@@ -5,6 +5,7 @@
 // 5. DFS - 后序，最大特点是执行操作时，必定已经遍历过该节点的左右了，故适合执行一些破坏性操作（删除）
 // 6. BFS
 // 7. 二叉搜索树，左 < 根 < 右
+// BFS/DFS 差异及各自特点讲解：https://leetcode.cn/problems/binary-tree-level-order-traversal/solutions/244853/bfs-de-shi-yong-chang-jing-zong-jie-ceng-xu-bian-l/
 
 class TreeNode<T = number> {
   val: T;
@@ -90,6 +91,22 @@ const dfs_pre_order_iteration = (
   }
 };
 
+const dfsPreOrderIteration = (
+  tree: TreeNode,
+  cb: (tree: TreeNode) => boolean | void
+) => {
+  const stack = [tree];
+
+  while (stack.length) {
+    const top = stack.pop();
+
+    cb(top);
+
+    top.right && stack.push(top.right);
+    top.left && stack.push(top.left);
+  }
+};
+
 const dfs_in_order_recursion = (
   tree: TreeNode,
   cb: (tree: TreeNode) => boolean | void
@@ -127,6 +144,33 @@ const dfs_in_order_iteration = (
       if (node.right) {
         stack.push(node.right);
         current = node.right;
+      }
+    }
+  }
+};
+
+const dfsInOrderIteration = (
+  tree: TreeNode,
+  cb: (tree: TreeNode) => boolean | void
+) => {
+  const stack = [tree];
+
+  let current = tree;
+
+  while (stack.length) {
+    // 左到底
+    if (current.left) {
+      stack.push(current.left);
+      current = current.left;
+    } else {
+      // 然后开始走
+      const top = stack.pop();
+
+      cb(top);
+
+      if (top.right) {
+        stack.push(top.right);
+        current = top.right;
       }
     }
   }
@@ -171,6 +215,29 @@ const dfs_post_order_iteration = (
   }
 };
 
+const dfsPostOrderIteration = (
+  tree: TreeNode,
+  cb: (tree: TreeNode) => boolean | void
+) => {
+  const stack = [tree];
+  let lastNode: TreeNode;
+
+  while (stack.length) {
+    const top = stack[stack.length - 1];
+
+    if (top.left && top.left !== lastNode && top.right !== lastNode) {
+      stack.push(top.left);
+    } else if (top.right && top.right !== lastNode) {
+      stack.push(top.right);
+    } else {
+      const current = stack.pop();
+
+      cb(current);
+      lastNode = current;
+    }
+  }
+};
+
 const bfs_recursion = (
   tree: TreeNode,
   cb: (tree: TreeNode) => boolean | void
@@ -208,6 +275,37 @@ const bfs_iteration = (
   }
 };
 
-bfs_iteration(list2TreeNode([3, 5, 1, 6, 2, 0, 8, null, null, 7, 4]), (tree) =>
-  console.log(tree.val)
-);
+const bfs_per_level = (tree: TreeNode) => {
+  const queue = [tree];
+
+  let n: number;
+
+  const results: number[][] = [];
+
+  while (queue.length) {
+    const n = queue.length;
+
+    const currentLevelResult = [];
+
+    // 每次进这个循环的都是同一个层级的，因为他们都是同一个时机推入的（只要0级是一级同时推入，就能保证后面都是同一级别推入的）
+    for (let i = 0; i < n; i++) {
+      const first = queue.shift();
+
+      currentLevelResult.push(first.val);
+
+      if (first.left) queue.push(first.left);
+      if (first.right) queue.push(first.right);
+    }
+
+    results.push(currentLevelResult);
+  }
+
+  console.log("results", results);
+
+  return results;
+};
+
+const tree = list2TreeNode([3, 5, 1, 6, 2, 0, 8, null, null, 7, 4]);
+// bfs_per_level(tree, (tree) =>
+//   console.log(tree.val)
+// );
