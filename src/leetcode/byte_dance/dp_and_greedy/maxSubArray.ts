@@ -28,10 +28,12 @@ import { printResult } from "../../utils";
 // 进阶：如果你已经实现复杂度为 O(n) 的解法，尝试使用更为精妙的 分治法 求解。
 // TODO: 线段树
 function maxSubArray(nums: number[]): number {
+  // if (nums.length === 1) return nums[0];
+
   // 以第i个数结果的最大合
   const dp = Array(nums.length).fill(0);
 
-  let max = Number.MIN_SAFE_INTEGER;
+  let max = nums[0];
 
   dp[0] = nums[0];
 
@@ -44,3 +46,5 @@ function maxSubArray(nums: number[]): number {
 }
 
 printResult(maxSubArray, [[-2, 1, -3, 4, -1, 2, 1, -5, 4]], 6);
+printResult(maxSubArray, [[1]], 1);
+printResult(maxSubArray, [[-1, -2]], -1);
