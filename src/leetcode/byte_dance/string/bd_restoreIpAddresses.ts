@@ -25,6 +25,13 @@ import { printResult } from "../../utils";
 // 1 <= s.length <= 20
 // s 仅由数字组成
 
+/**
+ * 解法：
+ * 回溯
+ * 1. 实现isValidIpWidget方法
+ * 2. 入参：剩余字符串，字符串从前往后遍历，依次判断是否合法，只要合法就截出来，然后继续往下递归
+ */
+
 const eqList = (l1: string[], l2: string[]) => {
   return l1.length === l2.length && l1.every((item) => l2.includes(item));
 };
@@ -123,15 +130,9 @@ function restoreIpAddresses2(s: string): string[] {
 function restoreIpAddresses(s: string): string[] {
   const results = new Set<string>();
 
-  function backTrace({
-    string,
-    stack,
-  }: {
-    string: string;
-    stack: string[];
-  }) {
+  function backTrace({ string, stack }: { string: string; stack: string[] }) {
     if (stack.length === 4 && !string) {
-      results.add(stack.join('.'));
+      results.add(stack.join("."));
       return;
     }
 

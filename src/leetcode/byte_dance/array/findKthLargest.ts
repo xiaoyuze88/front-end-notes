@@ -22,6 +22,12 @@ import { printResult } from "../../utils";
 // 1 <= k <= nums.length <= 105
 // -104 <= nums[i] <= 104
 
+/**
+ * 最大堆
+ *
+ * 1. 建堆
+ */
+
 function findKthLargest(nums: number[], k: number): number {
   // 1. 建大顶堆
 
@@ -48,7 +54,8 @@ function findKthLargest(nums: number[], k: number): number {
       const rightNodeIndex = index * 2 + 1;
 
       if (arr[leftNodeIndex] > arr[largestIndex]) largestIndex = leftNodeIndex;
-      if (arr[rightNodeIndex] > arr[largestIndex]) largestIndex = rightNodeIndex;
+      if (arr[rightNodeIndex] > arr[largestIndex])
+        largestIndex = rightNodeIndex;
 
       if (largestIndex !== index) {
         swap(index, largestIndex);
@@ -63,7 +70,7 @@ function findKthLargest(nums: number[], k: number): number {
     const temp = arr[src];
     arr[src] = arr[target];
     arr[target] = temp;
-  }
+  };
 
   const poll = () => {
     if (!arr.length) return undefined;
@@ -75,7 +82,7 @@ function findKthLargest(nums: number[], k: number): number {
     shiftDown(1);
 
     return peak;
-  }
+  };
 
   // 从前往后，从下往上
   for (let i = 1, l = arr.length; i < l; i++) {
@@ -89,5 +96,5 @@ function findKthLargest(nums: number[], k: number): number {
   return poll();
 }
 
-printResult(findKthLargest, [[3,2,1,5,6,4], 2], 5)
-printResult(findKthLargest, [[3,2,3,1,2,4,5,5,6], 4], 4)
+printResult(findKthLargest, [[3, 2, 1, 5, 6, 4], 2], 5);
+printResult(findKthLargest, [[3, 2, 3, 1, 2, 4, 5, 5, 6], 4], 4);

@@ -132,17 +132,17 @@ function checkInclusion(s1: string, s2: string): boolean {
 
   const doCount = (array: number[], char: string, isMinus?: boolean) => {
     if (!isMinus) {
-      array[char.charCodeAt(0) - 'a'.charCodeAt(0)]++;
+      array[char.charCodeAt(0) - "a".charCodeAt(0)]++;
     } else {
-      array[char.charCodeAt(0) - 'a'.charCodeAt(0)]--;
+      array[char.charCodeAt(0) - "a".charCodeAt(0)]--;
     }
   };
 
-  for (let i = 0, l = s1.length; i < l;i++) {
+  for (let i = 0, l = s1.length; i < l; i++) {
     doCount(arr1, s1[i]);
   }
 
-  const countStr1 = arr1.join('');
+  const countStr1 = arr1.join("");
 
   for (let i = 0, l = s2.length; i < l; i++) {
     // 还不够长，直接加
@@ -155,7 +155,7 @@ function checkInclusion(s1: string, s2: string): boolean {
     }
 
     // 此时长度是匹配的，直接比较
-    if (countStr1 === arr2.join('')) return true;
+    if (countStr1 === arr2.join("")) return true;
   }
 
   return false;

@@ -75,7 +75,7 @@ function lengthOfLongestSubstring(string: string): number {
   const updateMax = (current: number) => {
     if (current >= maxCount) maxCount = current;
   };
-  
+
   while (r <= string.length) {
     const s = string.substring(l, r);
 
@@ -89,8 +89,6 @@ function lengthOfLongestSubstring(string: string): number {
 
       r++;
       // console.log('move r', r);
-
-      
     } else {
       // console.log('update current', r - l);
       updateMax(r - l);

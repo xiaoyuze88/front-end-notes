@@ -21,6 +21,13 @@ import { printResult } from "../../utils";
 // num1 和 num2 只能由数字组成。
 // num1 和 num2 都不包含任何前导零，除了数字0本身。
 
+/**
+ * 解法：
+ * 核心是大数相加和大数相乘
+ * 1. 大数相加：先补齐位数，然后从后往前加即可，注意处理carry进位就行
+ * 2. 大数相乘，一个为底，另一个从后往前一个一个乘就好，用大数相加的方法处理结果，注意后面补0
+ */
+
 class ListNode2<T = number> {
   val: T;
   next: ListNode2<T> | null;

@@ -13,7 +13,7 @@ class ReactNode {
   }
 }
 
-const react_dfs = (node: ReactNode) => {
+const react_dfs1 = (node: ReactNode) => {
   const stack: ReactNode[] = [node];
 
   while (stack.length) {
@@ -25,6 +25,26 @@ const react_dfs = (node: ReactNode) => {
     } else {
       console.log("searching", top);
       top.visited = true;
+      if (top.children.length) {
+        top.children.forEach((item) => stack.push(item));
+      }
+    }
+  }
+};
+
+const react_dfs = (node: ReactNode) => {
+  const stack = [node];
+
+  while (stack.length) {
+    const top = stack[stack.length - 1];
+
+    if (top.visited) {
+      console.log("backTrace", top);
+      stack.pop();
+    } else {
+      console.log("visit", top);
+      top.visited = true;
+
       if (top.children.length) {
         top.children.forEach((item) => stack.push(item));
       }
