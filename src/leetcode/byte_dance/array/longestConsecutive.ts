@@ -16,12 +16,21 @@ import { printResult } from "../../utils";
 
 // 输入：nums = [0,3,7,2,5,8,4,6,0,1]
 // 输出：9
- 
 
 // 提示：
 
 // 0 <= nums.length <= 105
 // -109 <= nums[i] <= 109
+
+/**
+ * 解法1：
+ * 1. 建最小堆 O(n)
+ * 2. 依次推出，记录（相当于堆排序了，复杂度 O(nLogN)）
+ *
+ * 解法2：
+ * 1. 遍历一次记录所有值（Set去重）
+ * 2. 遍历Set，当存在 num-1 才去递增找，直到不再满足，这样每个数只会遍历一次
+ */
 
 function longestConsecutive2(nums: number[]): number {
   // 1. 建最小堆
@@ -33,7 +42,7 @@ function longestConsecutive2(nums: number[]): number {
     const temp = arr[i];
     arr[i] = arr[j];
     arr[j] = temp;
-  }
+  };
 
   const shiftDown = (i) => {
     while (i <= Math.floor((arr.length - 1) / 2)) {
@@ -52,7 +61,7 @@ function longestConsecutive2(nums: number[]): number {
         break;
       }
     }
-  }
+  };
 
   const shiftUp = (i) => {
     while (i >= 1) {
@@ -64,7 +73,7 @@ function longestConsecutive2(nums: number[]): number {
 
       i = parent;
     }
-  }
+  };
 
   const poll = () => {
     swap(1, arr.length - 1);
@@ -74,7 +83,7 @@ function longestConsecutive2(nums: number[]): number {
     shiftDown(1);
 
     return peak;
-  }
+  };
 
   for (let i = 1, l = arr.length; i < l; i++) {
     shiftUp(i);
@@ -85,12 +94,10 @@ function longestConsecutive2(nums: number[]): number {
 
   // 建堆 O(n)，遍历一次 n
 
-  while (arr.length -1 >= 0) {
-
-  }
+  while (arr.length - 1 >= 0) {}
 
   return -1;
-};
+}
 
 function longestConsecutive(nums: number[]): number {
   // 1. 记录所有数值
@@ -115,10 +122,10 @@ function longestConsecutive(nums: number[]): number {
 
       maxCount = Math.max(count, maxCount);
     }
-  })
+  });
 
   return maxCount;
-};
+}
 
-printResult(longestConsecutive, [[100,4,200,1,3,2]], 4);
-printResult(longestConsecutive, [[0,3,7,2,5,8,4,6,0,1]], 9);
+printResult(longestConsecutive, [[100, 4, 200, 1, 3, 2]], 4);
+printResult(longestConsecutive, [[0, 3, 7, 2, 5, 8, 4, 6, 0, 1]], 9);

@@ -1,4 +1,5 @@
 // 300. 最长递增子序列
+// https://leetcode.cn/problems/longest-increasing-subsequence/description/?utm_source=LCUS&utm_medium=ip_redirect&utm_campaign=transfer2china
 // 中等
 // 相关标签
 // 相关企业
@@ -32,6 +33,17 @@ import { printResult } from "../../utils";
 // 进阶：
 
 // 你能将算法的时间复杂度降低到 O(n log(n)) 吗?
+
+/**
+ * 解法：
+ *
+ * dp[i] = 以i结尾的递增子序列长度
+ * dp[0] = 1;
+ * dp[i] = max(dp[j]), j < i && nums[j] < dp[i]
+ *
+ * 进阶：找 dp[j] 的过程，可以用二分法替代，但是前提是有序？
+ */
+
 function lengthOfLIS(nums: number[]): number {
   // 以 i 作为结尾元素的LIS
   const dp = Array(nums.length).fill(0);

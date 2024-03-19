@@ -31,6 +31,20 @@ import { printResult } from "../../utils";
 // 进阶：
 
 // 你可以只使用 O(n) 的额外空间（n 为三角形的总行数）来解决这个问题吗？
+
+/**
+ * dp[i][j] 为走到 第i行第j个元素时的最小值
+ *
+ * 第一个列只能为第一列的合
+ * dp[i][0] = dp[i-1][0] + triangle[i][0];
+ * 最后一列也只能为最后一列的合
+ * dp[i][triangle[i].length - 1] = triangle[i][triangle[i].length - 1]
+ *
+ * dp[i][j] = Math.min(dp[i-1][j], dp[i-1][j - 1])
+ *
+ *
+ */
+
 function minimumTotal(triangle: number[][]): number {
   if (triangle.length === 1) return triangle[0][0];
 

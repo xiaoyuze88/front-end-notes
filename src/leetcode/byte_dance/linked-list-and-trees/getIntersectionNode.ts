@@ -62,6 +62,14 @@ import {
 
 // 进阶：你能否设计一个时间复杂度 O(m + n) 、仅用 O(1) 内存的解决方案？
 
+/**
+ * 假设 A 到交叉点前有 a 步，交叉部分有 c 步，B到交叉点前有 b 步
+ *
+ * 如果两个指针同时走，走完A，将头指向 B，另一个走完B后，指向A，这么他们最终必将相交，因为 a + c + b = b + c + a
+ *
+ * 相交点即是所求节点，如果找不到，最后两个都将走到头
+ */
+
 function getIntersectionNode(
   headA: ListNode | null,
   headB: ListNode | null

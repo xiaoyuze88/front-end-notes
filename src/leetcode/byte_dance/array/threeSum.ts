@@ -34,6 +34,14 @@ import { printResult } from "../../utils";
 // 3 <= nums.length <= 3000
 // -105 <= nums[i] <= 105
 
+/**
+ * 解法：
+ * 1. 先排序
+ * 2. 从左到右遍历，到谁谁做中位数，然后双指针两头往中间走，大了就右左一，小了就左右移，
+ * @param nums
+ * @returns
+ */
+
 function isValid(nums: number[]) {
   return nums.length === 3 && nums.reduce((prev, next) => prev + next, 0) === 0;
 }
@@ -202,7 +210,7 @@ function threeSum2(nums: number[]): number[][] {
 }
 
 function threeSum(nums: number[]): number[][] {
-  nums.sort((a, b) => a > b ? 1 : -1);
+  nums.sort((a, b) => (a > b ? 1 : -1));
 
   let mid = 1;
 
@@ -217,7 +225,7 @@ function threeSum(nums: number[]): number[][] {
       const sum = nums[mid] + nums[left] + nums[right];
 
       if (sum === 0) {
-        results.add([nums[left], nums[mid], nums[right]].join('|'));
+        results.add([nums[left], nums[mid], nums[right]].join("|"));
         left++;
         right--;
       }
@@ -232,7 +240,7 @@ function threeSum(nums: number[]): number[][] {
     mid++;
   }
 
-  return Array.from(results).map((s) => s.split('|').map((s) => +s));
+  return Array.from(results).map((s) => s.split("|").map((s) => +s));
 }
 
 printResult(threeSum, [[-1, 0, 1, 2, -1, -4]], []);

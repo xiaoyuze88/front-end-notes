@@ -33,6 +33,11 @@ import { printResult } from "../../utils";
 // 1 <= n <= 9
 // 1 <= k <= n!
 
+/**
+ * 解法:
+ * 1. 找规律，逐渐缩小范围
+ */
+
 const factorial = (n: number) => {
   let result = 1;
 
@@ -42,7 +47,7 @@ const factorial = (n: number) => {
   }
 
   return result;
-}
+};
 
 // 找规律
 function getPermutation(n: number, k: number): string {
@@ -50,21 +55,23 @@ function getPermutation(n: number, k: number): string {
   const stack = [];
 
   // 剩下合法的数字
-  let numberLeft = Array(n).fill(0).map((_, index) => index + 1);
+  let numberLeft = Array(n)
+    .fill(0)
+    .map((_, index) => index + 1);
 
   // 够数则返回
   while (stack.length <= n) {
-    console.log('numberLeft', numberLeft);
+    console.log("numberLeft", numberLeft);
 
     // k为1直接返回第一个
     if (k === 1) {
       const first = numberLeft.shift();
-      
+
       stack.push(first);
-      console.log('k == numberLeft.length', first, stack);
+      console.log("k == numberLeft.length", first, stack);
     } else {
       // 依次找第一个数，排除第一个数后，剩下的数的组合数为 (n - 1)!
-      const numberRightFactorial = factorial(numberLeft.length - 1)
+      const numberRightFactorial = factorial(numberLeft.length - 1);
 
       // k 除以 剩下数的组合数，可以得到当前首位在第几个数
       const prefixIndex = Math.floor((k - 1) / numberRightFactorial);
@@ -80,14 +87,21 @@ function getPermutation(n: number, k: number): string {
       // 删掉已经确定的首位
       numberLeft.splice(prefixIndex, 1);
 
-      console.log('prefix', prefixNum, { numberRightFactorial, prefixIndex, prefixNum, numberLeft, stack, k });
+      console.log("prefix", prefixNum, {
+        numberRightFactorial,
+        prefixIndex,
+        prefixNum,
+        numberLeft,
+        stack,
+        k,
+      });
     }
   }
 
-  console.log('stack', stack);
+  console.log("stack", stack);
 
-  return stack.join('');
-};
+  return stack.join("");
+}
 
 // printResult(getPermutation, [3, 3], '213');
 // printResult(getPermutation, [4, 9], '2314');

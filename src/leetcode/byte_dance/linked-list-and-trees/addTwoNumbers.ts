@@ -2,9 +2,13 @@
 // https://leetcode.cn/explore/interview/card/bytedance/244/linked-list-and-tree/1022/
 // 给你两个 非空 的链表，表示两个非负的整数。它们每位数字都是按照 逆序 的方式存储的，并且每个节点只能存储 一位 数字。
 
-import { ListNode, arrayToListNode, listNodeToArray } from "../../linked-list/ListNode";
+import {
+  ListNode,
+  arrayToListNode,
+  listNodeToArray,
+} from "../../linked-list/ListNode";
 import { printResult } from "../../utils";
-import isEqual from 'lodash.isequal';
+import isEqual from "lodash.isequal";
 
 // 请你将两个数相加，并以相同形式返回一个表示和的链表。
 
@@ -30,7 +34,14 @@ import isEqual from 'lodash.isequal';
 // 0 <= Node.val <= 9
 // 题目数据保证列表表示的数字不含前导零
 
-function addTwoNumbers(l1: ListNode | null, l2: ListNode | null): ListNode | null {
+/**
+ * 两边同时往下遍历相加即可，注意进位以及一个数取尽后另一个数的推入，以及最后多余的 carry 补入
+ */
+
+function addTwoNumbers(
+  l1: ListNode | null,
+  l2: ListNode | null
+): ListNode | null {
   if (!l1 && !l2) return null;
 
   let resultHead: ListNode;
@@ -70,21 +81,24 @@ function addTwoNumbers(l1: ListNode | null, l2: ListNode | null): ListNode | nul
   }
 
   return resultHead;
-};
-
-const test = (arr1: number[], arr2: number[], expected: number[]) => {
-  printResult(addTwoNumbers, [arrayToListNode(arr1), arrayToListNode(arr2)], arrayToListNode(expected), (resp, expected) => {
-    const res = listNodeToArray(resp);
-    const exp = listNodeToArray(expected);
-  
-    console.log({ res, exp })
-  
-    return isEqual(res, exp);
-  })
 }
 
+const test = (arr1: number[], arr2: number[], expected: number[]) => {
+  printResult(
+    addTwoNumbers,
+    [arrayToListNode(arr1), arrayToListNode(arr2)],
+    arrayToListNode(expected),
+    (resp, expected) => {
+      const res = listNodeToArray(resp);
+      const exp = listNodeToArray(expected);
 
+      console.log({ res, exp });
+
+      return isEqual(res, exp);
+    }
+  );
+};
 
 // test([2,4,3], [5,6,4], [7,0,8]);
 // test([0], [0], [0]);
-test([9,9,9,9,9,9,9], [9,9,9,9], [8,9,9,9,0,0,0,1]);
+test([9, 9, 9, 9, 9, 9, 9], [9, 9, 9, 9], [8, 9, 9, 9, 0, 0, 0, 1]);

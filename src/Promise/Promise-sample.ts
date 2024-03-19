@@ -10,6 +10,12 @@ export class Promise<T = any> {
   private onFulfilledCallbacks: ((data?: T) => void)[] = [];
   private onRejectedCallbacks: ((error: Error) => void)[] = [];
 
+  private mc = new MessageChannel();
+
+  private _nextTick(cb: () => void) {
+    queueMicrotask(cb);
+  }
+
   static resolve(data): Promise {
     return new Promise((resolve) => resolve(data));
   }
@@ -64,9 +70,9 @@ export class Promise<T = any> {
       this.data = data;
       this.state = "fulfilled";
       this.onFulfilledCallbacks.forEach((callback) => {
-        setTimeout(() => {
+        this._nextTick(() => {
           callback(this.data);
-        }, 0);
+        });
       });
     };
 
@@ -76,9 +82,9 @@ export class Promise<T = any> {
       this.error = error;
       this.state = "rejected";
       this.onRejectedCallbacks.forEach((callback) => {
-        setTimeout(() => {
+        this._nextTick(() => {
           callback(this.error);
-        }, 0);
+        });
       });
     };
 
@@ -139,13 +145,13 @@ export class Promise<T = any> {
         this.onRejectedCallbacks.push(handleRejection);
         break;
       case "fulfilled":
-        setTimeout(() => {
+        this._nextTick(() => {
           handleFulfilled(this.data);
-        }, 0);
+        });
       case "rejected":
-        setTimeout(() => {
+        this._nextTick(() => {
           handleRejection(this.error);
-        }, 0);
+        });
         break;
     }
 

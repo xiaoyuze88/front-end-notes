@@ -32,6 +32,16 @@ import { printResult } from "../../utils";
 // 1 <= prices.length <= 3 * 104
 // 0 <= prices[i] <= 104
 
+/**
+ * dp[i][0],dp[i][1] 为第 i 天，j=1为有股票、0为没股票时的最大利润
+ * dp[0][0] = 0;
+ * dp[0][1] = -prices[0]
+ * dp[i][1] = max(dp[i - 1][1], dp[i-1][0] - prices[i])
+ * dp[i][0] = max(dp[i-1][1] + prices[0], dp[i-1][0])
+ *
+ * 求出 dp[i][0] 的最大值
+ */
+
 function maxProfit(prices: number[]): number {
   const dp = Array(prices.length).fill([0, 0]);
 

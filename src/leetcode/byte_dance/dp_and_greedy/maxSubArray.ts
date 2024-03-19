@@ -27,7 +27,16 @@ import { printResult } from "../../utils";
 
 // 进阶：如果你已经实现复杂度为 O(n) 的解法，尝试使用更为精妙的 分治法 求解。
 // TODO: 线段树
-function maxSubArray(nums: number[]): number {
+
+/**
+ * dp[i] 为以 nums[i] 结尾的子数组的最大和
+ * dp[0] = -2;
+ *
+ * 要么加上i更大，要么就i自立门户更大
+ * dp[i] = max(dp[i-1] + nums[i], nums[i])
+ */
+
+function maxSubArray2(nums: number[]): number {
   // if (nums.length === 1) return nums[0];
 
   // 以第i个数结果的最大合
@@ -36,6 +45,21 @@ function maxSubArray(nums: number[]): number {
   let max = nums[0];
 
   dp[0] = nums[0];
+
+  for (let i = 1; i < nums.length; i++) {
+    dp[i] = Math.max(dp[i - 1] + nums[i], nums[i]);
+    max = Math.max(max, dp[i]);
+  }
+
+  return max;
+}
+
+function maxSubArray(nums: number[]): number {
+  const dp: number[] = Array(nums.length).fill(0);
+
+  dp[0] = nums[0];
+
+  let max = nums[0];
 
   for (let i = 1; i < nums.length; i++) {
     dp[i] = Math.max(dp[i - 1] + nums[i], nums[i]);

@@ -23,9 +23,10 @@ import { printResult } from "../../utils";
 // -104 <= nums[i] <= 104
 
 /**
- * 最大堆
+ * 最大堆（复杂度 O(n)）
  *
  * 1. 建堆
+ * 2. 推k个出来
  */
 
 function findKthLargest(nums: number[], k: number): number {

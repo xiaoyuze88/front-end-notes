@@ -22,6 +22,21 @@
 
 // 1 <= prices.length <= 105
 // 0 <= prices[i] <= 104
+
+/**
+ * 无非就是成本最低的情况下，利润最大
+ * 遍历数组，找到成本最低的一天，同时利润最大的一天
+ *
+ * let minCost = Number.MAX_SAFE_INTEGER;
+ * let maxProfit = 0;
+ *
+ * for (let i = 0, l = prices.length; i < l; i++) {
+ *    minCost = min(minCost, prices[i]);
+ *    maxProfit = max(maxProfit, prices[i] - minCost)
+ * }
+ *
+ */
+
 function maxProfit(prices: number[]): number {
   let cost = Number.MAX_SAFE_INTEGER;
   let profit = 0;

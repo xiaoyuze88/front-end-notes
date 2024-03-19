@@ -8,7 +8,7 @@ import { printResult } from "../../utils";
 
 // 输入：height = [0,1,0,2,1,0,1,3,2,1,2,1]
 // 输出：6
-// 解释：上面是由数组 [0,1,0,2,1,0,1,3,2,1,2,1] 表示的高度图，在这种情况下，可以接 6 个单位的雨水（蓝色部分表示雨水）。 
+// 解释：上面是由数组 [0,1,0,2,1,0,1,3,2,1,2,1] 表示的高度图，在这种情况下，可以接 6 个单位的雨水（蓝色部分表示雨水）。
 // 示例 2：
 
 // 输入：height = [4,2,0,3,2,5]
@@ -19,6 +19,12 @@ import { printResult } from "../../utils";
 // n == height.length
 // 1 <= n <= 2 * 104
 // 0 <= height[i] <= 105
+
+/**
+ * 单调栈
+ *
+ * 1. 弄一个单调递减栈，遍历数组，大过栈尾的，将栈尾依次推出，同时计算每个的面积
+ */
 
 function trap(height: number[]): number {
   let areaSum = 0;
@@ -42,7 +48,7 @@ function trap(height: number[]): number {
     const first = heightArr.shift();
     const last = heightArr.pop();
 
-    const width = (Math.abs(j - i) - 1);
+    const width = Math.abs(j - i) - 1;
 
     // 先算最大一块，然后减掉中间的
     let size = Math.min(first, last) * width;
@@ -80,7 +86,7 @@ function trap(height: number[]): number {
   }
 
   return totalSize;
-};
+}
 
-printResult(trap, [[0,1,0,2,1,0,1,3,2,1,2,1]], 6);
-printResult(trap, [[4,2,0,3,2,5]], 9);
+printResult(trap, [[0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]], 6);
+printResult(trap, [[4, 2, 0, 3, 2, 5]], 9);

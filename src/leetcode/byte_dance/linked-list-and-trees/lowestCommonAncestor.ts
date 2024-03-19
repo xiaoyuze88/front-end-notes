@@ -2,8 +2,6 @@
 // https://leetcode.cn/explore/interview/card/bytedance/244/linked-list-and-tree/1026/
 // 给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
 
-import { TreeNode } from "../../binary-tree/TreeNode";
-
 // 百度百科中最近公共祖先的定义为：“对于有根树 T 的两个节点 p、q，最近公共祖先表示为一个节点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”
 
 // 示例 1：
@@ -28,6 +26,18 @@ import { TreeNode } from "../../binary-tree/TreeNode";
 // 所有 Node.val 互不相同 。
 // p != q
 // p 和 q 均存在于给定的二叉树中。
+
+/**
+ * 解法：
+ * dfs，返回是否命中左/右孩子、或自己就是左、右节点
+ *
+ * isLeftSon = dfs(node.left);
+ * isRightSon = dfs(node.right);
+ *
+ * 如果左右孩子都在当前节点之下，那么它就是结果（因为还要往回走，越后面的层级越高，所以最终结果必然是最高的节点）
+ */
+
+import { TreeNode } from "../../binary-tree/TreeNode";
 
 function lowestCommonAncestor(
   root: TreeNode | null,
@@ -54,4 +64,24 @@ function lowestCommonAncestor(
   dfs(root);
 
   return result;
+}
+
+function lowestCommonAncestor2(tree: TreeNode, p: number, q: number) {
+  let result = null;
+
+  const dfs = (node: TreeNode) => {
+    if (!node) return false;
+
+    const isLeftSon = dfs(node.left);
+    const isRightSon = dfs(node.right);
+
+    if (
+      (isLeftSon && isRightSon) ||
+      ((isRightSon || isLeftSon) && (node.val === p || node.val === q))
+    ) {
+      result = node.val;
+    }
+
+    return isLeftSon || isRightSon || node.val === p || node.val === q;
+  };
 }

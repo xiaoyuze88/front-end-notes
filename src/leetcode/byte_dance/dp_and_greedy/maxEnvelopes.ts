@@ -26,6 +26,12 @@ import data from "./maxEnvelopes_data.json";
 // 1 <= envelopes.length <= 105
 // envelopes[i].length == 2
 // 1 <= wi, hi <= 105
+
+/**
+ * 1. 先将 w 按顺序排好，相同的 w，按 h 逆序排列(这样就不可能同w情况下按h排成递增序列)
+ * 2. 按 h 取递增子序列
+ */
+
 function maxEnvelopes(envelopes: Array<[number, number]>): number {
   envelopes.sort((a, b) => {
     const [wa, ha] = a;

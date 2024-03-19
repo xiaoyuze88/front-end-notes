@@ -27,6 +27,11 @@ import { printResult } from "../../utils";
 // 1 <= m, n <= 50
 // grid[i][j] 为 0 或 1
 
+/**
+ * 解法：
+ * 1. 深度优先+栈，记录每个访问过的（浪费额外空间，也可以每走过一个就标记为0）
+ */
+
 // 四个合法的位移
 const directions = [
   {
@@ -155,7 +160,7 @@ function maxAreaOfIsland(grid: number[][]): number {
 
           // console.log('current', stack);
 
-          const [x, y] = current.split('|');
+          const [x, y] = current.split("|");
 
           for (let i = 0, l = directions.length; i < l; i++) {
             const { x: deltaX, y: deltaY } = directions[i];

@@ -24,6 +24,13 @@ import { printResult } from "../../utils";
 // 1 <= m, n <= 300
 // matrix[i][j] 为 '0' 或 '1'
 
+/**
+ * 解法：
+ * 1. dp[i][j] 为 以 ij 为右下角的正方形的边长
+ * 2. dp[i][j] = min(dp[i-1][j], dp[i-1][j-1], dp[i][j-1]) + 1, matrix[i][j] == 1
+ * 3. 返回 dp 中的最大值
+ */
+
 function maximalSquare(matrix: string[][]): number {
   const lengthY = matrix.length;
   const lengthX = matrix[0].length;

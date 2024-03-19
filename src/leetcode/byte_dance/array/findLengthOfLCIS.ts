@@ -23,6 +23,13 @@ import { printResult } from "../../utils";
 // 1 <= nums.length <= 104
 // -109 <= nums[i] <= 109
 
+/**
+ * 解法：
+ * 因为是找连续递增，可以用双指针
+ * 1. 只要右指针比左边的大，就一直右移，直到不满足
+ * 2. 左指针移动到当前右指针处，然后右指针右移一位
+ */
+
 // 双指针
 function findLengthOfLCIS2(nums: number[]): number {
   let left = 0;
