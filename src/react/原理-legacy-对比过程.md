@@ -29,7 +29,7 @@ updateContainer 应该为全量更新 container 中的节点，里面会获取�
 scheduleUpdateOnFiber是唯一接收更新的函数
 
 1. 首先传入需要执行更新的 Fiber 对象
-2. 根据Fiber对象和传入的lane，依次更新当前 Fiber 及其所有父节点，还有各父节点的子节点的 lane 为设置的lane，最后Fiber树种一直往上找到 HostRootFiber，再根据 HostRootFiber.stateNode 找到 FiberRoot，并返回
+2. 根据Fiber对象和传入的lane，依次更新当前 Fiber 及其所有父节点、及各父节点的子节点的 lane 为设置的lane，最后Fiber树种一直往上找到 HostRootFiber，再根据 HostRootFiber.stateNode 找到 FiberRoot，并返回
 3. 调用核心入口 performSyncWorkOnRoot，传入 FiberRoot
 
 performSyncWorkOnRoot
@@ -75,10 +75,10 @@ for FunctionComponent:
 3. 获取下级 reactElement
 
 completeWork
-1. 大部分tag类型都不处理，碰到hostComponent的话需要实例化dom，并将dom指向 fiber.stateNode
-2. 检查当前fiber的tag是否标记为需要操作，NoFlag/PerformFlag 都代表无需操作，大于它即代表这个Fiber需要操作mutation，此时需要将当前 Fiber 挂在 return 节点的 effect 链上，顺序是从下层到上层，这样后续的动作就仅需要遍历这个 effect 链即可知道哪些节点需要执行操作
+1. 大部分tag类型都不处理，碰到hostComponent的话需要实例化dom，并将dom指向 fiber.stateNode，同时将真实子节点的dom节点（fiber树和dom树非一一对应）append 到当前 dom 内
+2. 检查当前fiber的flag是否标记为需要操作，NoFlag/PerformedWork 都代表无需操作，大于它即代表这个Fiber需要操作mutation，此时需要将当前 Fiber 挂在 return 节点的 effect 链上，顺序是从下层到上层，这样后续的动作就仅需要遍历这个 effect 链即可知道哪些节点需要执行操作
 
-最终，得到一颗完整的 alternate fiber 树，HostRoot 上挂载了整棵树中所有副作用队列，越下层的副作用越靠前，同时各dom节点也已拼装好并挂在各自fiber.stateNode 上
+最终，得到一颗完整的 alternate fiber 树，HostRoot 上挂载了整棵树中所有副作用队列，越下层的副作用越靠前，同时dom树也已拼好
 
 commitRoot
 beforeRender:
@@ -99,7 +99,7 @@ Passive：
 
 2. commitMutationEffects
 处理队列中带有 Placement、Update/Deletion等标记的节点
-Placement => appendChild/appendBefore
+Placement => appendChild/appendBefore(对于mount阶段，其实就是直接将整颗新的dom树渲染到容器内)
 Update => commitWork => commitUpdate => update props/attributes to fiber/dom
 Deletion => removeChild
 
