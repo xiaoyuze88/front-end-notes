@@ -31,3 +31,21 @@ ensureRootIsScheduled 会根据下一个优先级去 scheduler 注册一个任�
 
 3. performSyncWorkOnRoot
 
+beginWork
+1. 如果 fiber 上的 lanes 不够高，则走 bailout，检查 childLanes 是否需要更新，如果不需要直接开始回溯，如果需要则 clone child fiber，然后继续往下走
+
+* updateClassComponent
+创建过程：
+1. 实例化 class
+2. 处理 updateQueue，拿到最新的 state 挂在 class 实例上，触发生命周期，更新 Flags
+更新过程：
+1. 触发生命周期
+2. 处理 updateQueue，更新 flags，检查是否需要更新（优先检查 shouldComponentUpdate，然后判断是否 pure，如果 pure 则对 props/state 进行浅对比，即是对第一层对象进行===比较，否则都返回 true）
+
+最后都执行 finishClassComponent：
+1. 如果前面 shouldUpdate 为 false，直接走 bailout
+2. 调用 render，拿到 nextChildren(JSXElement)，然后根据 nextChildren 执行 reconcileChildren
+3. reconcileChildren，详见reconcileChildren.md
+
+completeWork
+绝大部分类型都不操作，HostComponent的话会diffProperties，然后找出需要施加的属性变更（产物是 updatePayload，是一个数组，两个为一组，key, props），并标记需要执行的动作，同时将对应动作的 effect 挂在父节点上
