@@ -95,13 +95,23 @@ Snapshot：
 2. 而HostRoot会调用 clearContainer清空容器节点
 
 Passive：
-针对使用了Hooks的函数，会通过scheduler注册一个任务来处理effects（如 useEffect）
+针对使用了Hooks的函数，会通过scheduler注册一个任务来处理effects（如 useEffect），要注意，这里仅注册回调，具体副作用在 commitLayoutEffects 阶段推入 pendingPassiveEffectMount/pendingPassiveEffectUnmount 中，并会在完成 commitLayoutEffects 后标记 pendingPassiveEffectPriority，这样在该次渲染（的同步调用）结束后，在注册的回调中依次执行
 
 2. commitMutationEffects
 处理队列中带有 Placement、Update/Deletion等标记的节点
-Placement => appendChild/appendBefore
-Update => commitWork => commitUpdate => update props/attributes to fiber/dom
-Deletion => removeChild
+
+Placement
+=> appendChild/appendBefore
+
+Deletion => commitDeletion => unmountHostComponents
+for HostComponent/HostText
+1. commitNestedUnmounts
+
+
+Update => commitWork =>
+for HostComponent: commitUpdate => update props/attributes to fiber/dom
+for FunctionComponent: commitHookEffectListUnmount，找 updateQueue 上的 effect 链，依次执行 destroy 回调
+ 
 
 执行完dom操作后，切换 hostRoot.current = finishedWork，然后执行 commitLayoutEffects
 
