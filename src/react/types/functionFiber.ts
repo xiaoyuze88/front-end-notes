@@ -5,6 +5,7 @@ interface FunctionFiber extends BaseFiber {
     // 当有 useEffect/useLayoutEffect 等被动触发的副作用时，会将 HookEffect 链挂在 fiber.updateQueue.lastEffect 上，也是一个环形链
     lastEffect: HookEffect;
   };
+  elementType: (props: any) => JSX.Element;
 }
 
 type Hook = StatefulHook | EffectHook | CallbackHook;

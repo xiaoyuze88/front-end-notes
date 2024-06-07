@@ -6,8 +6,12 @@ interface BaseFiber {
   tag: FiberTag;
   key: string;
 
+  // 指向组件的type
   elementType: any;
+  // 大部分场景都等于elementType，除了一些特殊场景，比如 hmr 时，会针对一些组件类型做一些特殊处理
   type: any;
+
+  dependencies: any; // 该 fiber 节点所依赖的(contexts, events)等
 
   stateNode: any;
 
