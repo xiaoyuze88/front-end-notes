@@ -36,7 +36,8 @@ updateContextProvider:
 2. readContext
 
 beginWork 对应fiber前，首先执行 prepareToReadContext：
-为当前fiber beginWork 前做好清理工作，包括 currentlyRenderingFiber、lastContextDependency，还有 fiber.dependencies.firstContext
+1. 为当前fiber beginWork 前做好清理工作，包括 currentlyRenderingFiber、lastContextDependency，还有 fiber.dependencies.firstContext
+2. 同时判断当前 fiber 上有无 dependencies，如果有的话，判断 dependencies.lanes 和 renderLanes是否有重合，有的话标记当前 wip 的 didReceiveUpdate 为true
 
 然后每次消费 context时，执行 readContext:
 1. 构建 contextItem 对象，包含 { context, observedBits, next }

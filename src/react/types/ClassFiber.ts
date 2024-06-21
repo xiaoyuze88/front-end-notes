@@ -9,12 +9,14 @@ interface ClassFiber<ClassComponent extends Component> extends BaseFiber {
 
 interface ClassUpdateQueue<State> {
   baseState: State;
-  firstBaseUpdate: ClassUpdate;
-  lastBaseUpdate: ClassUpdate;
+  // baseUpdate是单向链表
+  firstBaseUpdate: ClassUpdate<State>;
+  lastBaseUpdate: ClassUpdate<State>;
   shared: {
-    pending: ClassUpdate;
+    // 环形链表，指向队尾
+    pending: ClassUpdate<State>;
   };
-  effects: ClassUpdate[]; // 带有 callback 的 Update 对象列表
+  effects: ClassUpdate<State>[]; // 带有 callback 的 Update 对象列表
 }
 
 enum UpdateTag {
@@ -24,11 +26,14 @@ enum UpdateTag {
   "CaptureUpdate" = 3,
 }
 
-interface ClassUpdate<Payload = any> {
+interface ClassUpdate<State = any, Payload = any> {
   eventTime: number; // 发起update事件的时间(17.0.2中作为临时字段, 即将移出)
   lane: Lane;
   tag: UpdateTag;
-  payload: Payload; // 不同类型payload不同
+  // 不同类型payload不同
+  // RootFiber => { element: ReactNode };
+  // ClassComponent => Partial<State> | (prevState: State) => Partial<State>;
+  payload: Payload;
   callback: () => void; // commit 后执行的回调
   next: ClassUpdate;
 }

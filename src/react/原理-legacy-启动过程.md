@@ -24,23 +24,42 @@ container._rateRootContainer = ReactDomRoot
 
 初始化完成后，调用unbatchedUpdates来更新上下文为 Unbatched，然后调用 updateContainer,
 
-updateContainer 应该为全量更新 container 中的节点，里面会获取当前fiber 的lane，获取parentComponent的context，创建 Update对象，然后启动核心逻辑 scheduleUpdateOnFiber。
+<!-- updateContainer 应该为全量更新 container 中的节点，里面会获取当前fiber 的lane，获取parentComponent的context，创建 Update对象，然后启动核心逻辑 scheduleUpdateOnFiber。 -->
 
 scheduleUpdateOnFiber是唯一接收更新的函数
 
 1. 首先传入需要执行更新的 Fiber 对象
 2. 根据Fiber对象和传入的lane，依次更新当前 Fiber 及其所有父节点，还有各父节点的子节点的 lane 为设置的lane，最后Fiber树种一直往上找到 HostRootFiber，再根据 HostRootFiber.stateNode 找到 FiberRoot，并返回
+3. markRootUpdated，将 updateLane merge 到 root.pendingLanes 上；然后根据 laneToIndex，将当前 update 的 eventTime 更新到 root.eventTimes[laneIndex] 上。
+4. legacy mode下，lane始终为 sync，若当前 context 为 LegacyUnbatched 且非 RenderContext | CommitContext，则直接调用 performSyncWorkOnRoot；否则，会先调用 ensureRootIsScheduled，然后判断当前 context 是否等于 NoContext，如果是的话，会调用 flushSyncCallbackQueue
 3. 调用核心入口 performSyncWorkOnRoot，传入 FiberRoot
+
+ensureRootIsScheduled
+TODO
 
 performSyncWorkOnRoot
 
-1. 根据 FiberRoot 获取当前 lane
-2. 调用 renderRootSync(核心构建Fiber树的逻辑)
+1. flushPassiveEffects，依次执行 useEffect 注册的副作用，先执行 unmount 再执行 mount
+2. 如果当前已经有workInProgressRoot，且与本次渲染的root相同，那么说明是一个渲染中更新，此时判断一下上一个渲染的 Lanes（workInProgressRootRenderLanes）是否含有已过期的lanes，如果有的话，先按上一个渲染的lanes渲染（TODO: 渲染中更新在对比阶段详细补充）
+3. 根据 FiberRoot 获取当前 lane
+4. 调用 renderRootSync(核心构建Fiber树的逻辑)
+
+flushPassiveEffects
+细节待补充
 
 renderRootSync
 
-1. prepareFreshStack 准备一个干净的栈（根据FiberRoot 初始化第一个 workInProgress，即 root.current.alternative）
-2. workLoopSync 遍历 workInProgress（dfs+回溯）
+1. 缓存上一个上下文，上下文合入 RenderContext
+2. pushDispatcher，将 ContextOnlyDispatcher（除了 readContext，其他都将报错）赋值为当前 hooks 的 dispatcher，同时返回上一个 dispatcher
+3. 如果 workInProgressRoot 和当前渲染 root 不一致，或者 workInProgressRootRenderLanes和当前渲染lanes不一致，那么 prepareFreshStack 准备一个干净的栈（根据FiberRoot 初始化第一个 workInProgress，即 root.current.alternative）
+3. workLoopSync 遍历 workInProgress（dfs+回溯）
+
+prepareFreshStack
+1. 重置 FiberRoot 上的一些渲染运行时需要用到的全局变量，如 root.finishedWork/finishedLanes 等
+2. 如果当前有 workInProgressRoot，那么需要打断并重置（主要是重置上下文相关堆栈）
+3. 创建/克隆一个新的 workInProgress
+4. 重置一些 workInProgress 相关的全局变量，如 workInProgressRootRenderLanes/subtreeRenderLanes/workInProgressRootIncludedLanes/workInProgressRootExitStatus/workInProgressRootSkippedLanes/workInProgressRootUpdatedLanes 等
+其中 workInProgressRootRenderLanes 仅在这个时机赋值
 
 workInProgress 中对每个 workInProgress 执行 performUnitOfWork
 

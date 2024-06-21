@@ -23,6 +23,7 @@ interface BaseFiber {
 
   index: number;
 
+  // Fragment的pendingProps就是children，因为它没其他逻辑了
   pendingProps: any;
   memorizedProps: any;
 
@@ -40,9 +41,22 @@ interface BaseFiber {
   lanes: Lanes; // 当前fiber 的lanes集合
   childLanes: Lanes; // 所有子元素的 lanes 集合
 
+  // 直接记录有副作用的 fiber，需要进行何种操作根据 flags 判断
   nextEffect: Fiber;
   firstEffect: Fiber;
   lastEffect: Fiber;
 }
 
+interface FragmentFiber extends BaseFiber {
+  // 直接为 children
+  pendingProps: JSX.Element | JSX.Element[];
+}
+
+interface TextNodeFiber extends BaseFiber {
+  // 直接为 textContent
+  pendingProps: string;
+}
+
 type Fiber = FunctionFiber;
+
+// manualDispatchChangeEvent/act
