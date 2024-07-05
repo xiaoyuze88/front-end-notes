@@ -34,18 +34,38 @@
 // 1. 如果有大于 first 的数，赋值给 second
 // 2. 如果有小于 first 的数，则替换 first，严格保证 first < second
 // 3. 如果有大于 second 数，即表示成立
+// function increasingTriplet(nums: number[]): boolean {
+//   let first = nums[0];
+//   let second = Number.MAX_SAFE_INTEGER;
+
+//   for (let i = 0, l = nums.length; i < l; i++) {
+//     if (nums[i] > second) {
+//       return true;
+//     }
+    
+//     if (nums[i] > first) {
+//       second = nums[i];
+//     } else {
+//       first = nums[i];
+//     }
+//   }
+
+//   return false;
+// }
+
 function increasingTriplet(nums: number[]): boolean {
   let first = nums[0];
   let second = Number.MAX_SAFE_INTEGER;
 
-  for (let i = 0, l = nums.length; i < l; i++) {
+  for (let i = 1, l = nums.length; i < l; i++) {
     if (nums[i] > second) {
+      console.log('first', first, second, nums[i]);
       return true;
     }
-    
+
     if (nums[i] > first) {
       second = nums[i];
-    } else {
+    } else if (nums[i] < first) {
       first = nums[i];
     }
   }
@@ -53,7 +73,8 @@ function increasingTriplet(nums: number[]): boolean {
   return false;
 }
 
-console.log(increasingTriplet([5, 1, 6]));
-console.log(increasingTriplet([2, 1, 5, 0, 4, 6]));
-console.log(increasingTriplet([1, 2, 3, 4, 5]));
-console.log(increasingTriplet([5, 4, 3, 2, 1]));
+// console.log(increasingTriplet([5, 1, 6]));
+// console.log(increasingTriplet([2, 1, 5, 0, 4, 6]));
+// console.log(increasingTriplet([1, 2, 3, 4, 5]));
+// console.log(increasingTriplet([5, 4, 3, 2, 1]));
+console.log(increasingTriplet([4, 6, 5, 6]));

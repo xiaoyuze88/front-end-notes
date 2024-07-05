@@ -8,14 +8,16 @@ interface FunctionFiber extends BaseFiber {
   elementType: (props: any) => JSX.Element;
 }
 
-type Hook = StatefulHook | EffectHook | CallbackHook;
+type Hook = StatefulHook | EffectHook | CallbackHook | MemoHook;
 
 interface BaseHook<State = unknown> {
   memoizedState: State; // 当前的 state
-  baseState: State; // 基础状态 TODO: 干嘛的？
-  baseQueue: unknown; // 基础状态队列，仅包含当前渲染优先下能够执行的队列
-  queue: HookUpdateQueue; // 全量的更新队列，仅状态队列会有
-  next: BaseHook; // 下一个hook的指针
+  // 计算 baseQueue 时的基础状态，如果上一次渲染有不够权限执行的任务，那么该 state 为第一个 baseQueue hook 的前一个状态
+  // 如果没有不够权限执行的任务，那么 baseState 即上次渲染的结果状态
+  baseState: State;
+  baseQueue: HookUpdate; // 待处理的任务，指向队尾，环形链表
+  queue: HookUpdateQueue;
+  next: Hook; // 下一个hook的指针
 }
 
 /**
@@ -24,6 +26,7 @@ interface BaseHook<State = unknown> {
 type StatefulHook<State = unknown> = BaseHook<State>;
 
 interface HookUpdateQueue<State = unknown, Action = unknown> {
+  // Update循环链在这里，指向最后一个
   pending: HookUpdate;
   dispatch: (action: Action) => void;
   lastRenderedReducer: Reducer<State, Action>; // 函数当前调用时拿到的最新的 reducer

@@ -60,13 +60,11 @@ const dfs_pre_order_recursion = (
   tree: TreeNode,
   cb: (tree: TreeNode) => boolean | void
 ) => {
-  const dfs = (tree: TreeNode) => {
-    const shouldBreak = cb(tree);
+  const dfs = (node: TreeNode) => {
+    cb(node);
 
-    if (shouldBreak) return;
-
-    if (tree.left) dfs(tree.left);
-    if (tree.right) dfs(tree.right);
+    if (node.left) dfs(node.left);
+    if (node.right) dfs(node.right);
   };
 
   dfs(tree);
@@ -79,31 +77,14 @@ const dfs_pre_order_iteration = (
 ) => {
   const stack = [tree];
 
-  while (stack.length) {
-    const top = stack.pop();
+  while(stack.length) {
+    const last = stack.pop();
 
-    const shouldBreak = cb(top);
+    cb(last);
 
-    if (shouldBreak) return;
-
-    if (top.right) stack.push(top.right);
-    if (top.left) stack.push(top.left);
-  }
-};
-
-const dfsPreOrderIteration = (
-  tree: TreeNode,
-  cb: (tree: TreeNode) => boolean | void
-) => {
-  const stack = [tree];
-
-  while (stack.length) {
-    const top = stack.pop();
-
-    cb(top);
-
-    top.right && stack.push(top.right);
-    top.left && stack.push(top.left);
+    // 先进后出，所以先进右后进左
+    if (last.right) stack.push(last.right);
+    if (last.left) stack.push(last.left);
   }
 };
 
@@ -111,13 +92,13 @@ const dfs_in_order_recursion = (
   tree: TreeNode,
   cb: (tree: TreeNode) => boolean | void
 ) => {
-  const dfs = (tree: TreeNode) => {
-    if (tree.left) dfs(tree.left);
+  const dfs = (node: TreeNode) => {
+    if (node.left) dfs(node.left);
 
-    cb(tree);
+    cb(node);
 
-    if (tree.right) dfs(tree.right);
-  };
+    if (node.right) dfs(node.right);
+  }
 
   dfs(tree);
 };
@@ -126,17 +107,15 @@ const dfs_in_order_iteration = (
   tree: TreeNode,
   cb: (tree: TreeNode) => boolean | void
 ) => {
-  const stack: TreeNode[] = [tree];
+  const stack = [tree];
 
   let current = tree;
 
-  while (stack.length) {
-    // 有左一直往下找，全部推进堆栈
+  while( stack.length) {
     if (current.left) {
       stack.push(current.left);
       current = current.left;
     } else {
-      // 没有左了，开始查
       const node = stack.pop();
 
       cb(node);
@@ -144,33 +123,6 @@ const dfs_in_order_iteration = (
       if (node.right) {
         stack.push(node.right);
         current = node.right;
-      }
-    }
-  }
-};
-
-const dfsInOrderIteration = (
-  tree: TreeNode,
-  cb: (tree: TreeNode) => boolean | void
-) => {
-  const stack = [tree];
-
-  let current = tree;
-
-  while (stack.length) {
-    // 左到底
-    if (current.left) {
-      stack.push(current.left);
-      current = current.left;
-    } else {
-      // 然后开始走
-      const top = stack.pop();
-
-      cb(top);
-
-      if (top.right) {
-        stack.push(top.right);
-        current = top.right;
       }
     }
   }
@@ -194,118 +146,76 @@ const dfs_post_order_iteration = (
   tree: TreeNode,
   cb: (tree: TreeNode) => boolean | void
 ) => {
-  const stack: TreeNode[] = [tree];
-
-  let lastNode: TreeNode;
-
-  while (stack.length) {
-    const top = stack[stack.length - 1];
-
-    // 回来的时候，如果左节点==lastNode，说明左边走过了，如果右节点==lastNode，说明两边都走过了
-    if (top.left && top.left !== lastNode && top.right !== lastNode) {
-      stack.push(top.left);
-    } else if (top.right && top.right !== lastNode) {
-      stack.push(top.right);
-    } else {
-      const node = stack.pop();
-
-      cb(node);
-      lastNode = node;
-    }
-  }
-};
-
-const dfsPostOrderIteration = (
-  tree: TreeNode,
-  cb: (tree: TreeNode) => boolean | void
-) => {
   const stack = [tree];
-  let lastNode: TreeNode;
 
-  while (stack.length) {
+  let lastNode = tree;
+
+  while(stack.length) {
     const top = stack[stack.length - 1];
 
-    if (top.left && top.left !== lastNode && top.right !== lastNode) {
+    if (top.left && lastNode !== top.left && lastNode !== top.right) {
       stack.push(top.left);
-    } else if (top.right && top.right !== lastNode) {
+    } else if (top.right && lastNode !== top.right) {
       stack.push(top.right);
     } else {
-      const current = stack.pop();
+      lastNode = stack.pop();
 
-      cb(current);
-      lastNode = current;
+      cb(lastNode);
     }
   }
 };
+
 
 const bfs_recursion = (
   tree: TreeNode,
   cb: (tree: TreeNode) => boolean | void
 ) => {
-  const queue: TreeNode[] = [tree];
+  const queue = [tree];
 
-  const bfs = () => {
+  while(queue.length) {
     const first = queue.shift();
 
-    if (!first) return;
-
     cb(first);
+
     if (first.left) queue.push(first.left);
     if (first.right) queue.push(first.right);
-
-    bfs();
-  };
-
-  bfs();
+  }
 };
 
 const bfs_iteration = (
   tree: TreeNode,
   cb: (tree: TreeNode) => boolean | void
 ) => {
-  const queue: TreeNode[] = [tree];
 
-  while (queue.length) {
-    const first = queue.shift();
-
-    cb(first);
-
-    if (first.left) queue.push(first.left);
-    if (first.right) queue.push(first.right);
-  }
 };
 
 const bfs_per_level = (tree: TreeNode) => {
-  const queue = [tree];
-
-  let n: number;
-
   const results: number[][] = [];
 
-  while (queue.length) {
-    const n = queue.length;
+  const queue = [tree];
 
-    const currentLevelResult = [];
+  while(queue.length) {
+    const currentLevelCount = queue.length;
 
-    // 每次进这个循环的都是同一个层级的，因为他们都是同一个时机推入的（只要0级是一级同时推入，就能保证后面都是同一级别推入的）
-    for (let i = 0; i < n; i++) {
-      const first = queue.shift();
+    const currentLevelResult: number[] = [];
 
-      currentLevelResult.push(first.val);
+    for (let i = 0; i < currentLevelCount; i++) {
+      const current = queue.shift();
 
-      if (first.left) queue.push(first.left);
-      if (first.right) queue.push(first.right);
+      currentLevelResult.push(current.val);
+
+      if (current.left) queue.push(current.left);
+      if (current.right) queue.push(current.right);
     }
 
-    results.push(currentLevelResult);
+    results.push(currentLevelResult)
   }
-
-  console.log("results", results);
 
   return results;
 };
 
 const tree = list2TreeNode([3, 5, 1, 6, 2, 0, 8, null, null, 7, 4]);
-dfs_pre_order_recursion(tree, (tree) =>
-  console.log(tree.val)
-);
+// bfs_recursion(tree, (tree) =>
+//   console.log(tree.val)
+// );
+console.log(bfs_per_level(tree));

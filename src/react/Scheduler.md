@@ -10,3 +10,62 @@ task（宏任务） -> job（micro task）
 timeQueue - 等待中的队列
 taskQueue - 待执行的队列
 
+
+StatefulHook:
+
+fiber.memorizedState = Hook
+
+Hook {
+  memorizedState: State;
+  baseState: State;
+  baseQueue: HookUpdate;
+  queue: {
+    pending: HookUpdate;
+    dispatch,
+    lastRenderedReducer,
+    lastRenderedState,
+  };
+  next: Hook;
+}
+
+HookUpdate {
+  lane,
+  action,
+  eagerReducer,
+  eagerState,
+  next,
+}
+
+EffectHook
+
+fiber.memorizedState = Hook
+fiber.updateQueue.lastEffect = Effect;
+
+Hook {
+  memorizedState: Effect;
+}
+
+Effect {
+  tag,
+  create,
+  destroy,
+  deps,
+  next,
+}
+
+MemoHook: 
+
+fiber.memorizedState = Hook
+
+Hook {
+  memorizedState: [value, deps];
+  next: Hook;
+}
+
+CallbackHook: 
+
+fiber.memorizedState = Hook;
+Hook {
+  memorizedState: [callback, deps];
+  next: Hook;
+}
