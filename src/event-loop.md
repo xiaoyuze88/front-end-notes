@@ -14,6 +14,7 @@ macro task:
 setTimeout/setInterval/postMessage/MessageChanel.postMessage
 
 当 call stack 为空时，开始依次执行 micro task（一个推出才推入第二个，因为一个task可能产生新的task）
+e.g: 如果想使用无限微任务触发微任务来实现无限循环，会导致卡死，因为微任务不完全执行完彻底推出堆栈，是不会塞入其他微任务的
 
 当 micro queue 也空后，开始执行 macro task
 

@@ -1,5 +1,8 @@
 # reconcileChildren
 
+reconcileChildren 主要是通过 ReactElement(JSX) => workInProgress Fiber
+beginWork 主要是比较 current fiber vs workInProgress fiber，无 current 就创建，有 current 就做对比，最后 mark effects
+
 1. 根据有无 currentChild 来决定执行 mountChildFibers/reconcileChildFibers，他们的差异是是否追踪副作用（shouldTrackSideEffects），mount无需track
 
 mountChildFibers/reconcileChildFibers
